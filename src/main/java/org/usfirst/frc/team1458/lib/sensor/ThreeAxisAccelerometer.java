@@ -84,6 +84,6 @@ public interface ThreeAxisAccelerometer extends TwoAxisAccelerometer {
 	 * @return the 3-axis accelerometer; never null
 	 */
 	static ThreeAxisAccelerometer create(TwoAxisAccelerometer accel, Accelerometer zAxis) {
-		return compose(accel.getXDirection(), accel.getYDirection(), zAxis);
+		return null; // TODO NOT MAKE THIS SUPER BROKEN  //compose(accel.getXDirection(), accel.getYDirection(), zAxis);
 	}
 }
