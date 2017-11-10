@@ -17,12 +17,14 @@ public class InputTest {
 					int read = System.in.read();
 					if(read == 'u') {
 						up.set(true);
-						GlobalTeleUpdate.teleUpdate();
+						// TODO FIX
+						//GlobalTeleUpdate.teleUpdate();
 						up.set(false);
 						System.out.println("UP");
 					} else if(read == 'd') {
 						down.set(true);
-						GlobalTeleUpdate.teleUpdate();
+						// TODO FIX
+						//GlobalTeleUpdate.teleUpdate();
 						down.set(false);
 						System.out.println("DOWN");
 					}
@@ -30,7 +32,8 @@ public class InputTest {
 
 			}
 			System.out.println("Number= "+number.getValue());
-			GlobalTeleUpdate.teleUpdate();
+			// TODO FIX
+			//GlobalTeleUpdate.teleUpdate();
 			Thread.sleep(500);
 		}
 	}

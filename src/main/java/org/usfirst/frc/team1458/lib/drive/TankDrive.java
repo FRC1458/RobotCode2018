@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1458.lib.drive;
 
 /**
- * TODO: Implement
+ * Implements a tank drivetrain
  *
  * @author asinghani
  */

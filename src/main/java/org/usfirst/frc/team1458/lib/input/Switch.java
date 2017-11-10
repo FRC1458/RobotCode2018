@@ -109,7 +109,8 @@ public interface Switch extends DigitalInput {
 			boolean toggle = false;
 
 			{
-				GlobalTeleUpdate.registerHandler(this::teleUpdate);
+				// TODO FIX
+				//GlobalTeleUpdate.registerHandler(this::teleUpdate);
 			}
 
 			@Override

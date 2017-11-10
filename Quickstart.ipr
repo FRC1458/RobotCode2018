@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />
       <entry name=".+\.(gif|png|jpeg|jpg)" />
@@ -12,20 +11,30 @@
       <entry name="!?*.java" />
       <entry name="!?*.groovy" />
     </wildcardResourcePatterns>
-    <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-    </annotationProcessing>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="2018turtleshellX_main" target="1.8" />
+      <module name="2018turtleshellX_test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="" />
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
-  <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$PROJECT_DIR$/gradle" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
+        <option name="useAutoImport" value="true" />
+      </GradleProjectSettings>
+    </option>
   </component>
   <component name="GradleUISettings">
     <setting name="root" />
@@ -34,6 +43,12 @@
     <setting name="root" />
   </component>
   <component name="IdProvider" IDEtalkID="11DA1DB66DD62DDA1ED602B7079FE97C" />
+  <component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+      <option name="myName" value="Project Default" />
+    </profile>
+    <version value="1.0" />
+  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -50,6 +65,17 @@
     <option name="HEAP_SIZE" />
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
+  </component>
+  <component name="Kotlin2JsCompilerArguments">
+    <option name="sourceMapPrefix" value="" />
+    <option name="sourceMapEmbedSources" value="inlining" />
+  </component>
+  <component name="Kotlin2JvmCompilerArguments">
+    <option name="jvmTarget" value="1.8" />
+  </component>
+  <component name="KotlinCommonCompilerArguments">
+    <option name="languageVersion" value="1.0" />
+    <option name="apiVersion" value="1.0" />
   </component>
   <component name="Palette2">
     <group name="Swing">
@@ -181,10 +207,13 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/2018turtleshellX.iml" filepath="$PROJECT_DIR$/2018turtleshellX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2018turtleshellX_main.iml" filepath="$PROJECT_DIR$/2018turtleshellX_main.iml" group="2018turtleshellX" />
+      <module fileurl="file://$PROJECT_DIR$/2018turtleshellX_test.iml" filepath="$PROJECT_DIR$/2018turtleshellX_test.iml" group="2018turtleshellX" />
       <module fileurl="file://$PROJECT_DIR$/Quickstart.iml" filepath="$PROJECT_DIR$/Quickstart.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">
@@ -192,6 +221,96 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+  </component>
+  <component name="libraryTable">
+    <library name="Gradle: edu.wpi.cscore.java:cscore:arm:1.0.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.cscore.java/cscore/1.0.1/5781d7a2c3b7a55cee6f4ba52595b86befe6ef4f/cscore-1.0.1-arm.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.cscore.java/cscore/1.0.1/59550e0db18f1c85b1fa0e49768a9c9f69ebe885/cscore-1.0.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: edu.wpi.first.wpilib.networktables.java:NetworkTables:arm:3.1.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilib.networktables.java/NetworkTables/3.1.7/fb573a4610fdc75d50851841499f654bc1177a41/NetworkTables-3.1.7-arm.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilib.networktables.java/NetworkTables/3.1.7/ae81523c2312b711256c31c896cd2638420ec993/NetworkTables-3.1.7-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: edu.wpi.first.wpilib.networktables.java:NetworkTables:desktop:3.1.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilib.networktables.java/NetworkTables/3.1.7/9f5baa306923168455434bfd253c2a9ccf35a151/NetworkTables-3.1.7-desktop.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilib.networktables.java/NetworkTables/3.1.7/ae81523c2312b711256c31c896cd2638420ec993/NetworkTables-3.1.7-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: edu.wpi.first.wpilibj:athena:2017.2.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibj/athena/2017.2.1/584af5e7c4aa60d81c726571d5a4efcbb7db3d77/athena-2017.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpilibj/athena/2017.2.1/38c75d30d3cd6bd44be358c16a543cf664b8d4a1/athena-2017.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.51">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.51/e34fe80c9714240525f665113dd3749415515655/kotlin-stdlib-1.1.51.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.51/b44aed5fe16fe27bb75488a2274d435e875fdb44/kotlin-stdlib-1.1.51-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.jetbrains:annotations:13.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/5991ca87ef1fb5544943d9abc5a9a37583fabe03/annotations-13.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.opencv:opencv-java:3.1.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.1.0/2a534baab7f01c049ba9768adb645f9b0128f987/opencv-java-3.1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.1.0/30ac314db3d3a30fae0e3dc2e1740466708f1c0/opencv-java-3.1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: thirdparty.frc.ctre:Toolsuite-Java:4.4.1.14">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/thirdparty.frc.ctre/Toolsuite-Java/4.4.1.14/bf276de29a4ac9d16150b748e546fb7ade1118d7/Toolsuite-Java-4.4.1.14.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: thirdparty.frc.kauai:Navx-Java:3.0.323">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/thirdparty.frc.kauai/Navx-Java/3.0.323/2145b8a6638a950d2ce1df2f7b10bd995a15b8dc/Navx-Java-3.0.323.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="KotlinJavaRuntime">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/kotlin-runtime.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/kotlin-reflect.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/lib/kotlin-runtime-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
   <component name="masterDetails">
     <states>

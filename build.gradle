@@ -1,61 +1,45 @@
-buildscript {
-    ext.kotlin_version = '1.1.4-3'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 plugins {
-    id "java"
+    id "org.jetbrains.kotlin.jvm" version "1.1.51"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2017.2.3"
+    id "jaci.openrio.gradle.GradleRIO" version "2017.10.24b"
 }
-apply plugin: 'kotlin'
 
-frc {
-    team = "1458"
-    robotClass = "org.usfirst.frc.team1458.robot.Robot"
+def TEAM = 1458
+def ROBOT_CLASS = "org.usfirst.frc.team1458.robot.Robot"
+
+deploy {
+    targets {
+        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
+            team = TEAM
+        }
+    }
+    artifacts {
+        artifact('frcKotlin', jaci.openrio.gradle.frc.FRCJavaArtifact) {
+            targets << "roborio"
+            jar = 'jar'
+        }
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
-wpi {
-    opencvVersion = "3.2.0"
-}
-
+// Add more .jar libraries here, DO NOT IMPORT "**/*.jar" (use specific .jar file names)
 dependencies {
-    compile wpilib()
+    compile wpilib() // Includes WPILib, NetworkTables Core, CameraServer Core, OpenCV
+    compile ctre()
     compile navx()
-    compile fileTree(dir: 'libs', include: '**/*.jar')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-}
 
-def robotManifest = {
-    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
-    attributes 'Robot-Class': frc.robotClass
+    compile "org.jetbrains.kotlin:kotlin-stdlib" // Kotlin support
 }
 
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest robotManifest
+    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.2.1'
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    gradleVersion = '4.2.1'
 }

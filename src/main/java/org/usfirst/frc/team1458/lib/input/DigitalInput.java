@@ -51,8 +51,9 @@ public interface DigitalInput {
 		return new DigitalInput() {
 
 			{
-				SwitchReactor.onTriggered(up, this::onUp);
-				SwitchReactor.onTriggered(down, this::onDown);
+				// TODO FIX
+				//SwitchReactor.onTriggered(up, this::onUp);
+				//SwitchReactor.onTriggered(down, this::onDown);
 			}
 
 			int value = defaultValue;
