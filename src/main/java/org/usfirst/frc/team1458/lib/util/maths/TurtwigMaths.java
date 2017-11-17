@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  * @author mehnadnerd & asinghani
  */
-public class TurtleMaths {
+public class TurtwigMaths {
 	/**
 	 * Fit the double to a specified range. Equivalent to: (toFit > max ? max :
 	 * toFit < min ? min: toFit)
@@ -144,7 +144,7 @@ public class TurtleMaths {
 	 * @return
 	 */
 	public static double percentError(double actual, double measured) {
-		return TurtleMaths.absDiff(actual, measured) / actual;
+		return TurtwigMaths.absDiff(actual, measured) / actual;
 	}
 
 	/**
@@ -227,5 +227,5 @@ public class TurtleMaths {
 	/**
 	 * Hiding the constructor so cannot be initialised
 	 */
-	private TurtleMaths() {}
+	private TurtwigMaths() {}
 }

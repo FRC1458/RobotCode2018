@@ -2,7 +2,7 @@ package org.usfirst.frc.team1458.lib.test;
 
 import org.usfirst.frc.team1458.lib.pid.PID;
 import org.usfirst.frc.team1458.lib.pid.PIDConstants;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class PIDTest {
 			i++;
 			double pidValue = pid.newValue(position);
 
-			pidValue = TurtleMaths.fitRange(pidValue, -1, 1);
+			pidValue = TurtwigMaths.fitRange(pidValue, -1, 1);
 
 			position += pidValue;
 

@@ -2,7 +2,6 @@ package org.usfirst.frc.team1458.robot
 
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotState
-import edu.wpi.first.wpilibj.buttons.Button
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.usfirst.frc.team1458.lib.core.BaseRobot
 import org.usfirst.frc.team1458.lib.hardware.Hardware
@@ -11,8 +10,6 @@ import org.usfirst.frc.team1458.lib.motor.Motor
 import org.usfirst.frc.team1458.lib.motor.MotorSet
 import org.usfirst.frc.team1458.lib.motor.abilities.BrakeMode
 import org.usfirst.frc.team1458.lib.util.maths.InputFunction
-import org.usfirst.frc.team1458.lib.util.maths.RangeShifter
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths
 
 /**
  * Final robot for the club fair

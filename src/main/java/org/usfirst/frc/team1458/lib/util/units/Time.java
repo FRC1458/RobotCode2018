@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1458.lib.util.units;
 
 import org.usfirst.frc.team1458.lib.util.annotation.Immutable;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 /**
  * Represents an amount of time
@@ -39,6 +39,6 @@ public interface Time extends Unit {
 
 	default boolean equals(Time time) {
 		if (this == time) return true;
-		return TurtleMaths.absDiff(time.getValue(), this.getValue()) < 0.000001;
+		return TurtwigMaths.absDiff(time.getValue(), this.getValue()) < 0.000001;
 	}
 }

@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1458.lib.util.units;
 
 import org.usfirst.frc.team1458.lib.util.annotation.Immutable;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 /**
  * This class represents an angle.
@@ -58,6 +58,6 @@ public interface Angle extends Unit {
 	default boolean equals(Angle angle) {
 		if (this == angle) return true;
 
-		return TurtleMaths.absDiff(angle.getValue(), this.getValue()) < 0.000001;
+		return TurtwigMaths.absDiff(angle.getValue(), this.getValue()) < 0.000001;
 	}
 }

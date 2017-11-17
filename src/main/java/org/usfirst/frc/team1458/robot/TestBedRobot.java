@@ -5,7 +5,7 @@ import org.usfirst.frc.team1458.lib.hardware.Hardware;
 import org.usfirst.frc.team1458.lib.input.*;
 import org.usfirst.frc.team1458.lib.motor.Motor;
 import org.usfirst.frc.team1458.lib.util.maths.InputFunction;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 /**
  * This is our testbed for the bot
@@ -89,7 +89,7 @@ public class TestBedRobot extends BaseRobot {
 	@Override
 	public void teleopPeriodic() {
 		if(turn.get()) {
-			double motorValue = TurtleMaths.shift(speed.getValue(), -10, 10, -1.0, 1.0);
+			double motorValue = TurtwigMaths.shift(speed.getValue(), -10, 10, -1.0, 1.0);
 			leftMotor.setSpeed(getTransmission().apply(motorValue));
 			rightMotor.setSpeed(getTransmission().apply(-1 * motorValue));
 		} else {

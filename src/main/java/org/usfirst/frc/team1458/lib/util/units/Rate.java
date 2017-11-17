@@ -2,7 +2,7 @@ package org.usfirst.frc.team1458.lib.util.units;
 
 
 import org.usfirst.frc.team1458.lib.util.annotation.Immutable;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 /**
  * A class representing a rate or speed 
@@ -33,6 +33,6 @@ interface Rate<T extends Unit> extends Unit {
 	default boolean equals(Rate<T> rate) {
 		if (this == rate) return true;
 
-		return TurtleMaths.absDiff(rate.getValue(), this.getValue()) < 0.000001;
+		return TurtwigMaths.absDiff(rate.getValue(), this.getValue()) < 0.000001;
 	}
 }

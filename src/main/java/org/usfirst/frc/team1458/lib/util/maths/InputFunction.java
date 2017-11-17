@@ -26,7 +26,7 @@ public interface InputFunction {
 				samples.remove(0);
 			}
 
-			return TurtleMaths.average(samples);
+			return TurtwigMaths.average(samples);
 		}
 	};
 

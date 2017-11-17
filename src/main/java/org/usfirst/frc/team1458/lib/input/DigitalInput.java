@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1458.lib.input;
 
-import org.usfirst.frc.team1458.lib.util.SwitchReactor;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 /**
  * Any sensor which has multiple digital states (represented as integers)
@@ -23,7 +22,7 @@ public interface DigitalInput {
 	 * @return a new digital input based on the existing analog input
 	 */
 	static DigitalInput fromAnalog(AnalogInput analogInput, double min, double max) {
-		return () -> (int) TurtleMaths.shift(analogInput.getValue(), -1.0, 1.0, min, max);
+		return () -> (int) TurtwigMaths.shift(analogInput.getValue(), -1.0, 1.0, min, max);
 	}
 
 	/**

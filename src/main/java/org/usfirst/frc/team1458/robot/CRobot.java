@@ -3,7 +3,6 @@ package org.usfirst.frc.team1458.robot;
 import edu.wpi.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.jetbrains.annotations.NotNull;
 import org.usfirst.frc.team1458.lib.core.AutoMode;
@@ -16,8 +15,6 @@ import org.usfirst.frc.team1458.lib.motor.abilities.BrakeMode;
 import org.usfirst.frc.team1458.lib.pid.PID;
 import org.usfirst.frc.team1458.lib.pid.PIDConstants;
 import org.usfirst.frc.team1458.lib.util.maths.InputFunction;
-import org.usfirst.frc.team1458.lib.util.maths.RangeShifter;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
 
 /**
  * Final robot for the club fair
@@ -122,12 +119,18 @@ public class CRobot extends BaseRobot {
 
 
 		if(climbButton.get()) {
-			double value = pid.newValue(x);
-			leftMotor.setSpeed(value);
-			rightMotor.setSpeed(-value);
+			if(x == -1) {
+				leftMotor.stop();
+				rightMotor.stop();
+				shooterMotor.stop();
+			} else {
+				double value = pid.newValue(x);
+				leftMotor.setSpeed(value);
+				rightMotor.setSpeed(-value);
 
-			// TODO make sure target is correct
-			shooterMotor.setSpeed(pid.atTarget() ? -0.7 : 0);
+				// TODO make sure target is correct
+				shooterMotor.setSpeed(pid.atTarget() ? -0.7 : 0);
+			}
 		} else {
 			leftMotor.setSpeed(left.getValue());
 			rightMotor.setSpeed(right.getValue());

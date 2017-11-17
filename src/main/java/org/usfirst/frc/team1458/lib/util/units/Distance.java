@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1458.lib.util.units;
 
 import org.usfirst.frc.team1458.lib.util.annotation.Immutable;
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths;
+import org.usfirst.frc.team1458.lib.util.maths.TurtwigMaths;
 
 /**
  * This class represents a distance value.
@@ -73,6 +73,6 @@ public interface Distance extends Unit {
 
 	default boolean equals(Distance distance) {
 		if (this == distance) return true;
-		return TurtleMaths.absDiff(distance.getValue(), this.getValue()) < 0.000001;
+		return TurtwigMaths.absDiff(distance.getValue(), this.getValue()) < 0.000001;
 	}
 }
