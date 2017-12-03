@@ -41,7 +41,11 @@ interface Motor {
     }
 
     operator fun plus(otherMotor: Motor): Motor {
-        return Motor.compose(this, otherMotor);
+        return Motor.compose(this, otherMotor)
+    }
+
+    operator fun unaryMinus(): Motor {
+        return this.invert()
     }
 
     /**
@@ -53,9 +57,8 @@ interface Motor {
     fun scale(function: InputFunction): Motor {
         val superMotor = this
         return object : Motor {
-            override fun setSpeed(speed: Double): Motor {
+            override fun setSpeed(speed: Double) {
                 superMotor.setSpeed(function.apply(speed))
-                return this
             }
 
             override val speed: Double
@@ -96,11 +99,10 @@ interface Motor {
                 override val speed: Double
                     get() = motors[0].speed
 
-                override fun setSpeed(speed: Double): Motor {
+                override fun setSpeed(speed: Double) {
                     for (motor in motors) {
                         motor.setSpeed(speed)
                     }
-                    return this
                 }
             }
         }

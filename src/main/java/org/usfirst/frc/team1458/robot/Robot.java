@@ -1,4 +1,4 @@
 package org.usfirst.frc.team1458.robot;
 
 // Setup for club fair usage
-public class Robot extends CRobot {}
+public class Robot extends TestRobot {}
