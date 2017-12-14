@@ -10,7 +10,6 @@ import org.usfirst.frc.team1458.lib.core.BaseRobot;
 import org.usfirst.frc.team1458.lib.hardware.Hardware;
 import org.usfirst.frc.team1458.lib.input.*;
 import org.usfirst.frc.team1458.lib.motor.Motor;
-import org.usfirst.frc.team1458.lib.motor.MotorSet;
 import org.usfirst.frc.team1458.lib.motor.abilities.BrakeMode;
 import org.usfirst.frc.team1458.lib.pid.PID;
 import org.usfirst.frc.team1458.lib.pid.PIDConstants;
