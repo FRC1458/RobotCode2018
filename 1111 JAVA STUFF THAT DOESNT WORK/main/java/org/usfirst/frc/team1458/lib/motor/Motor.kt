@@ -74,16 +74,14 @@ interface Motor {
     val direction: Direction
         get() {
             val speed = speed
-            return if (speed > 0.001) {
-                Direction.FORWARD
-            } else if (speed < -0.001) {
-                Direction.REVERSE
-            } else {
-                Direction.STOPPED
+            return when {
+                speed > 0.001 -> Direction.FORWARD
+                speed < -0.001 -> Direction.REVERSE
+                else -> Direction.STOPPED
             }
         }
 
-    enum class Direction private constructor(var value: Int) {
+    enum class Direction constructor(var value: Int) {
         FORWARD(1), REVERSE(-1), STOPPED(0)
     }
 

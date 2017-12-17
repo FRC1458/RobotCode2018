@@ -1,9 +1,10 @@
 package org.usfirst.frc.team1458.lib.core
 
+import edu.wpi.first.wpilibj.RobotState
 import edu.wpi.first.wpilibj.SampleRobot
-import org.usfirst.frc.team1458.lib.util.flow.delay
-import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
-import java.util.*
+import org.usfirst.frc.team1458.lib.util.GlobalTeleUpdate
+
+import java.util.ArrayList
 
 /**
  * All robot classes should extend from this class.
@@ -57,13 +58,12 @@ abstract class BaseRobot : SampleRobot(), AutoModeHolder {
     }
 
     override fun robotInit() {
-        // TODO Coroutine-ize
         robotSetup()
-        threadedSetup()
         setupAutoModes()
         if (autoModes.isEmpty()) {
             autoModes.add(BlankAutoMode())
         }
+
     }
 
     override fun disabled() {
@@ -77,20 +77,9 @@ abstract class BaseRobot : SampleRobot(), AutoModeHolder {
 
     override fun operatorControl() {
         teleopInit()
-        while (super.isOperatorControl() && super.isEnabled()) {
-            var lastStartMillis = systemTimeMillis
+        while (RobotState.isOperatorControl() && RobotState.isEnabled()) {
             teleopPeriodic()
-            var lastEndMillis = systemTimeMillis
-
-            var nextStartMillis : Double = lastStartMillis
-
-            while(nextStartMillis < lastEndMillis || (nextStartMillis.toLong() % 20) != 0L) {
-                nextStartMillis += 1
-            }
-
-            while(systemTimeMillis < nextStartMillis) {
-                delay(1)
-            }
+            GlobalTeleUpdate.teleUpdate()
         }
     }
 
