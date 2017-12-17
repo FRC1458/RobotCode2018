@@ -12,4 +12,7 @@ interface AutoModeHolder {
         get
 
     var selectedAutoModeIndex: Int
+
+    val selectedAutoMode: AutoMode
+        get() = autoModes[selectedAutoModeIndex]
 }
