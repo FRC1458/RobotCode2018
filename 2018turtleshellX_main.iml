@@ -12,7 +12,7 @@
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
           <option name="languageVersion" value="1.1" />
-          <option name="apiVersion" value="1.0" />
+          <option name="apiVersion" value="1.1" />
           <option name="pluginOptions">
             <array />
           </option>
@@ -41,6 +41,7 @@
     <orderEntry type="library" name="Gradle: edu.wpi.cscore.java:cscore:arm:1.0.1" level="project" />
     <orderEntry type="library" name="Gradle: thirdparty.frc.ctre:Toolsuite-Java:4.4.1.14" level="project" />
     <orderEntry type="library" name="Gradle: thirdparty.frc.kauai:Navx-Java:3.0.323" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.51" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
   </component>

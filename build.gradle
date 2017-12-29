@@ -32,7 +32,9 @@ dependencies {
     compile ctre()
     compile navx()
 
+
     compile "org.jetbrains.kotlin:kotlin-stdlib" // Kotlin support
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3"
 }
 
 jar {

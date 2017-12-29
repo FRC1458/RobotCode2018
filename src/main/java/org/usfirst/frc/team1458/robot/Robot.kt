@@ -1,42 +1,30 @@
 package org.usfirst.frc.team1458.robot
 
-import org.usfirst.frc.team1458.lib.util.flow.delay
-import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
-import java.util.*
+import kotlinx.coroutines.experimental.runBlocking
+import org.usfirst.frc.team1458.lib.sensor.interfaces.DistanceSensor
+import org.usfirst.frc.team1458.lib.util.flow.*
 
-/**
- * TODO: Add Comment
- *
- * @author asinghani
- */
 
 class Robot {
     companion object {
         fun main(args : Array<String>) {
-            while (true) {
-                var lastStartMillis = systemTimeMillis
+            /*Logger.addDestination(Logger.Destination.Console(Logger.Destination.Format.HUMANREADABLE, color = true))
+            Logger.addDestination(Logger.Destination.File("file1.txt", Logger.Destination.Format.CSV, color = false, minSeverity = Logger.Severity.WARN))
+            Logger.addDestination(Logger.Destination.File("file2.txt", Logger.Destination.Format.HUMANREADABLE, color = true))
 
-                //code
-                System.out.println("Starting " + (systemTimeMillis % 1000000))
-                var d = Random().nextDouble()*50
-                System.out.println("Waiting " + d)
-                delay(d)
-                System.out.println("Ending " + (systemTimeMillis % 1000000))
-                System.out.println()
+            go { periodic (2) { Logger.w("DATA", "DATA") } }
 
+            runBlocking { suspendUntil { false } }*/
 
-                //code
-
-                var lastEndMillis = systemTimeMillis
-
-                var nextStartMillis : Double = lastStartMillis
-
-                while(nextStartMillis < lastEndMillis || (nextStartMillis.toLong() % 20) != 0L) {
-                    nextStartMillis += 1
-                }
-
-                while(systemTimeMillis < nextStartMillis) {
-                    delay(1)
+            runBlocking {
+                var a = 0.0
+                var sensor : DistanceSensor = DistanceSensor.create { a }
+                for(i in 1..100) {
+                    for (j in 1..10) {
+                        a += 1.0
+                        delay(5)
+                        println(sensor.velocity)
+                    }
                 }
             }
         }

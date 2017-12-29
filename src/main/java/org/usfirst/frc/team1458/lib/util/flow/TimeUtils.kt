@@ -18,7 +18,6 @@ val systemTimeMillis : Double
 /**
  * Delays execution for the specified number of milliseconds. Should be used very sparingly.
  */
-@Throws(InterruptedException::class)
 fun delay(millis : Double) {
     try {
         Timer.delay(millis / 1000.0)
@@ -26,12 +25,11 @@ fun delay(millis : Double) {
         try {
             Thread.sleep(millis.toLong())
         } catch (e2 : InterruptedException) {
-            throw e2
+
         }
     }
 }
 
-@Throws(InterruptedException::class)
 fun delay(millis : Long) {
     delay(millis.toDouble())
 }
