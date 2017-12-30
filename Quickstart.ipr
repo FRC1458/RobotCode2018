@@ -204,6 +204,7 @@
         <w>extrapolable</w>
         <w>feedforward</w>
         <w>interpolable</w>
+        <w>mcan</w>
       </words>
     </dictionary>
   </component>
