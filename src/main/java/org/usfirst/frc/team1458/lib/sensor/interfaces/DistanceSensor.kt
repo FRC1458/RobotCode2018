@@ -101,6 +101,5 @@ interface DistanceSensor : Zeroable {
         }
 
         // TODO ADD LIDAR LITE V3
-
     }
 }

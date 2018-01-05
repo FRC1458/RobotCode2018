@@ -39,6 +39,16 @@ interface Solenoid {
                 }
             }
         }
+
+        fun doubleSolenoid(PCMcanID: Int = 0, extendChannel: Int,
+                           retractChannel: Int, initialState: Solenoid.State,
+                           extendedSwitch: Switch, retractedSwitch: Switch) : Solenoid {
+            return doubleSolenoid(PCMcanID, extendChannel, retractChannel, initialState, {
+                if (extendedSwitch.triggered && (!retractedSwitch.triggered)) Position.EXTENDED
+                else if ((!extendedSwitch.triggered) && retractedSwitch.triggered) Position.RETRACTED
+                else Position.UNKNOWN
+            })
+        }
     }
 
     enum class State {

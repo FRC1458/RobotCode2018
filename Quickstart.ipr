@@ -201,10 +201,18 @@
     <dictionary name="anish">
       <words>
         <w>adxl</w>
+        <w>bport</w>
+        <w>cooldown</w>
+        <w>dconstants</w>
         <w>extrapolable</w>
         <w>feedforward</w>
         <w>interpolable</w>
+        <w>lbump</w>
+        <w>lstick</w>
         <w>mcan</w>
+        <w>rbump</w>
+        <w>rstick</w>
+        <w>upshift</w>
       </words>
     </dictionary>
   </component>

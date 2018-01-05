@@ -16,7 +16,7 @@ interface AnalogInput {
         return inverted
     }
 
-    fun scale(scale: Double) : AnalogInput {
+    infix fun scale(scale: Double) : AnalogInput {
         return create { value * scale }
     }
 

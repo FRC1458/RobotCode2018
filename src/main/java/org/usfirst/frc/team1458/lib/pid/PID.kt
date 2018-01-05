@@ -12,7 +12,7 @@ class PID(constants: PIDConstants, target: Double, val deadband: Double = 0.01, 
 
     var constants: PIDConstants = constants
         set(newConstants: PIDConstants) {
-            constants = newConstants
+            field = newConstants
 
             integral = 0.0
             lastTime = Double.NaN
@@ -24,7 +24,7 @@ class PID(constants: PIDConstants, target: Double, val deadband: Double = 0.01, 
 
     var target: Double = target
         set(newTarget: Double) {
-            target = newTarget
+            field = newTarget
 
             integral = 0.0
             lastTime = Double.NaN
@@ -42,7 +42,7 @@ class PID(constants: PIDConstants, target: Double, val deadband: Double = 0.01, 
 
     private var derivativeAverage = MovingAverage(15)
 
-    fun update(value: Double, derivative : Double = Double.NaN, feedforwardArgs : Map<String, Double>? = null) : Double {
+    fun update(value: Double, derivative : Double = Double.NaN, feedforwardArgs : DoubleArray = doubleArrayOf()) : Double {
         // Calculate error
         var error = target - value
 
@@ -72,7 +72,7 @@ class PID(constants: PIDConstants, target: Double, val deadband: Double = 0.01, 
         }
 
         // Calculate custom feedforward
-        var customFF = if(feedforwardArgs != null) { constants.kF_func(feedforwardArgs) } else { 0.0 }
+        var customFF = constants.kF_func(feedforwardArgs)
 
         // Calculate output
         val output =
@@ -85,6 +85,10 @@ class PID(constants: PIDConstants, target: Double, val deadband: Double = 0.01, 
         lastDerivative = derivativeAverage.average
 
         return output
+    }
+
+    fun clearIntegral() {
+        integral = 0.0
     }
 
     /**

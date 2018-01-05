@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1458.lib.sensor
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel
-import org.usfirst.frc.team1458.lib.input.interfaces.PowerMeasurable
+import org.usfirst.frc.team1458.lib.sensor.interfaces.PowerMeasurable
 
 object PDP {
     val pdp = PowerDistributionPanel()

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1458.lib.actuator
 
-import org.usfirst.frc.team1458.lib.input.interfaces.PowerMeasurable
+import org.usfirst.frc.team1458.lib.sensor.interfaces.PowerMeasurable
 import org.usfirst.frc.team1458.lib.input.interfaces.Switch
 
 class Compressor(private val PCMcanID: Int = 0) : PowerMeasurable {

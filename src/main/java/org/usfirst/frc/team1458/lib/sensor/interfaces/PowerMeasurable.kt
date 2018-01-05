@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1458.lib.input.interfaces
+package org.usfirst.frc.team1458.lib.sensor.interfaces
 
 interface PowerMeasurable {
     /**
