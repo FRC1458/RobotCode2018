@@ -100,9 +100,9 @@ interface Motor : Stoppable {
             return create(motor::setSpeed, motor::getSpeed)
         }
 
-        fun PWMTalonSRX(channel: Int) : Motor {
+        /*fun PWMTalonSRX(channel: Int) : Motor {
             var motor = edu.wpi.first.wpilibj.TalonSRX(channel)
             return create(motor::setSpeed, motor::getSpeed)
-        }
+        }*/
     }
 }

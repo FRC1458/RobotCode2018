@@ -69,7 +69,7 @@ interface SmartMotor : Motor, PowerMeasurable {
                 override val connectedEncoder: AngleSensor
                     get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
                 override val isEncoderWorking: Boolean
-                    get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+                    get() = false
                 /**
                  * Temperature of the motor controller in degrees Celsius
                  */
@@ -89,7 +89,7 @@ interface SmartMotor : Motor, PowerMeasurable {
                     set(value) {}
 
                 override fun follow(other: SmartMotor) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                 }
 
                 override fun stopFollow() {
