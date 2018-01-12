@@ -1,11 +1,63 @@
 package org.usfirst.frc.team1458.robot
 
 import kotlinx.coroutines.experimental.runBlocking
+import org.usfirst.frc.team1458.lib.actuator.SmartMotor
+import org.usfirst.frc.team1458.lib.core.BaseRobot
+import org.usfirst.frc.team1458.lib.drive.TankDrive
+import org.usfirst.frc.team1458.lib.input.Gamepad
+import org.usfirst.frc.team1458.lib.pid.PIDConstants
 import org.usfirst.frc.team1458.lib.sensor.interfaces.DistanceSensor
 import org.usfirst.frc.team1458.lib.util.flow.*
 
 
-class Robot {
+class Robot : BaseRobot() {
+
+    // TODO: add encoders and enable closed-loop control and tune PID constants
+    val drivetrain : TankDrive =
+            TankDrive(SmartMotor.CANtalonSRX(-1), SmartMotor.CANtalonSRX(-1),
+                    arrayOf(SmartMotor.CANtalonSRX(-1)), arrayOf(SmartMotor.CANtalonSRX(-1)),
+                    false, 12.0, 5.0, PIDConstants(0.01, 0.0, 0.0, 0.5))
+
+    val xboxController : Gamepad = Gamepad.xboxController(3)
+
+    override fun robotSetup() {
+
+    }
+
+
+    override fun setupAutoModes() {
+
+    }
+
+
+    override fun threadedSetup() {
+
+    }
+
+
+    override fun teleopInit() {
+
+    }
+
+
+    override fun teleopPeriodic() {
+        drivetrain.tankDrive(xboxController.leftY.value, xboxController.rightY.value)
+        //drivetrain.arcadeDrive(xboxController.leftY.value, xboxController.rightX.value)
+        /*drivetrain.scaledArcadeDrive(xboxController.leftY.value, xboxController.rightX.value,
+                xboxController.getButton(Gamepad.Button.LBUMP).triggered, { 0.6 * Math.pow(it, 0.5) + 0.2 })*/
+
+    }
+
+
+    override fun runTest() {
+
+    }
+
+
+    override fun robotDisabled() {
+
+    }
+
     companion object {
         fun main(args : Array<String>) {
             /*Logger.addDestination(Logger.Destination.Console(Logger.Destination.Format.HUMANREADABLE, color = true))

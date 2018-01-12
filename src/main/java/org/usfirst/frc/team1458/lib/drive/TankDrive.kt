@@ -5,6 +5,7 @@ import org.usfirst.frc.team1458.lib.actuator.Solenoid
 import org.usfirst.frc.team1458.lib.drive.util.AutoshiftHelper
 import org.usfirst.frc.team1458.lib.pid.PIDConstants
 
+
 /**
  * Tank drive class
  *
@@ -151,9 +152,21 @@ class TankDrive(val leftMaster: SmartMotor, val rightMaster: SmartMotor,
         }
     }
 
-    fun cheesyDrive(forward: Double, turn: Double) {
-        // TODO: Implement
+    fun scaledArcadeDrive(forward: Double, turn: Double, quickturn: Boolean = false, scaleFun : (Double) -> Double = { 0.6 * Math.pow(it, 0.5) + 0.2 }) {
+        if(quickturn) {
+            arcadeDrive(forward, turn)
+        } else {
+            if(closedLoopControl && closedLoopReady && closedLoopScaling != null) {
+                setDriveVelocity((forward - turn * scaleFun(forward)) * closedLoopScaling, (forward + turn * scaleFun(forward)) * closedLoopScaling, forward * closedLoopScaling)
+            } else {
+                setRawDrive(forward - turn * scaleFun(forward), forward + turn * scaleFun(forward), forward)
+            }
+        }
     }
+
+    //fun cheesyDrive(forward: Double, turn: Double) {
+        // TODO: Implement
+    //}
 
     // TODO: integrate motion profiling / pure pursuit
 }

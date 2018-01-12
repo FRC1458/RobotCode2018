@@ -210,6 +210,7 @@
         <w>lbump</w>
         <w>lstick</w>
         <w>mcan</w>
+        <w>quickturn</w>
         <w>rbump</w>
         <w>rstick</w>
         <w>upshift</w>
