@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1458.lib.actuator
 
-import com.ctre.CANTalon
+import com.ctre.phoenix.motorcontrol.ControlMode
+import com.ctre.phoenix.motorcontrol.IMotorController
+import com.ctre.phoenix.motorcontrol.can.TalonSRX
 import org.usfirst.frc.team1458.lib.pid.PIDConstants
 import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
 import org.usfirst.frc.team1458.lib.sensor.interfaces.PowerMeasurable
@@ -45,6 +47,11 @@ interface SmartMotor : Motor, PowerMeasurable {
         set
         get
 
+    override val inverted: SmartMotor
+        get
+
+    val _talonInstance : IMotorController?
+
     fun follow(other: SmartMotor)
     fun stopFollow()
 
@@ -56,7 +63,7 @@ interface SmartMotor : Motor, PowerMeasurable {
         // TODO: talon SRX create method, non-talon SRX create (with custom PID)
 
         fun CANtalonSRX(canID: Int): SmartMotor {
-            val talon : CANTalon = CANTalon(canID)
+            val talon : TalonSRX = TalonSRX(canID)
 
             return object : SmartMotor {
                 override val CANid: Int
@@ -89,21 +96,30 @@ interface SmartMotor : Motor, PowerMeasurable {
                     set(value) {}
 
                 override fun follow(other: SmartMotor) {
-
+                    talon.follow(other._talonInstance)
                 }
+
+                override val inverted: SmartMotor
+                    get() {
+                        talon.inverted = !talon.inverted
+                        return this
+                    }
 
                 override fun stopFollow() {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
 
                 override var speed: Double
-                    get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-                    set(value) {}
+                    get() = talon.motorOutputPercent
+                    set(value) { talon.set(ControlMode.PercentOutput, value) }
                 /**
                  * Current draw of this device, in Amps
                  */
                 override val currentDraw: Double
                     get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
+                override val _talonInstance: IMotorController?
+                    get() = talon
             }
         }
     }

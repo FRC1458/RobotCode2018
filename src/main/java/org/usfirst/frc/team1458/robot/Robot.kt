@@ -14,8 +14,9 @@ class Robot : BaseRobot() {
 
     // TODO: add encoders and enable closed-loop control and tune PID constants
     val drivetrain : TankDrive =
-            TankDrive(SmartMotor.CANtalonSRX(-1), SmartMotor.CANtalonSRX(-1),
-                    arrayOf(SmartMotor.CANtalonSRX(-1)), arrayOf(SmartMotor.CANtalonSRX(-1)),
+            TankDrive(SmartMotor.CANtalonSRX(10).inverted, SmartMotor.CANtalonSRX(13),
+                    arrayOf(SmartMotor.CANtalonSRX(11).inverted,SmartMotor.CANtalonSRX(12).inverted),
+                    arrayOf(SmartMotor.CANtalonSRX(14),SmartMotor.CANtalonSRX(15)),
                     false, 12.0, 5.0, PIDConstants(0.01, 0.0, 0.0, 0.5))
 
     val xboxController : Gamepad = Gamepad.xboxController(3)
@@ -41,8 +42,8 @@ class Robot : BaseRobot() {
 
 
     override fun teleopPeriodic() {
-        drivetrain.tankDrive(xboxController.leftY.value, xboxController.rightY.value)
-        //drivetrain.arcadeDrive(xboxController.leftY.value, xboxController.rightX.value)
+        //drivetrain.tankDrive(xboxController.leftY.value, xboxController.rightY.value)
+        drivetrain.arcadeDrive(xboxController.leftY.value, xboxController.rightX.value)
         /*drivetrain.scaledArcadeDrive(xboxController.leftY.value, xboxController.rightX.value,
                 xboxController.getButton(Gamepad.Button.LBUMP).triggered, { 0.6 * Math.pow(it, 0.5) + 0.2 })*/
 
