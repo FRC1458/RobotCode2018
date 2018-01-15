@@ -44,18 +44,21 @@ class Robot : BaseRobot() {
         //talonRight.PIDconstants = PIDConstants(0.0, kF = 1.0/6877.7)
 
 
-        val points = arrayOf(
+        /*val points = arrayOf(
                 Waypoint(-4.0, -1.0, Pathfinder.d2r(-45.0)),
                 Waypoint(-2.0, -2.0, 0.0),
                 Waypoint(0.0, 0.0, 0.0)
         )
 
         val config = Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 1.0/25.0, 3.5, 1.5, 10.0)
-        val trajectory = Pathfinder.generate(points, config)
+        val trajectory = Pathfinder.generate(points, config)*/
 
-        modifier = TankModifier(trajectory).modify(0.5) // TODO add width in meters
-        val file = File("~/path.csv")
-        Pathfinder.writeToCSV(file, trajectory)
+        //val myFile = File("~/test_.csv")
+        //val trajectory = Pathfinder.readFromCSV(myFile)
+
+        //modifier = TankModifier(trajectory).modify(0.5) // TODO add width in meters
+        //val file = File("~/path.csv")
+        //Pathfinder.writeToCSV(file, trajectory)
 
         System.out.println("Path Generation Finished")
     }
@@ -63,18 +66,15 @@ class Robot : BaseRobot() {
 
     override fun setupAutoModes() {
         addAutoMode(AutoMode.create {
-            val left = (modifier!!.getLeftTrajectory())
-            val right = (modifier!!.getRightTrajectory())
-
+            val leftTrajectory = Pathfinder.readFromCSV(File("~/test_left_detailed.csv"))
+            val righttTrajectory = Pathfinder.readFromCSV(File("~/test_right_detailed.csv"))
             val startTime = systemTimeMillis
-            while(true) {
-                val i = Math.floor((systemTimeMillis - startTime)/25.0).toInt()
-                drivetrain.setDriveVelocity(left[i].velocity, right[i].velocity)
+            while(Math.floor((systemTimeMillis-startTime)/0.05)<leftTrajectory.length()){
+                val i =Math.floor((systemTimeMillis-startTime)/0.05).toInt()
+                drivetrain.setDriveVelocity(leftTrajectory[i].velocity,righttTrajectory[i].velocity)
                 delay(1)
-                System.out.println("${systemTimeMillis - startTime},${left[i].velocity},${right[i].velocity}," +
-                        "${left[i].x},${left[i].y},${right[i].x},${right[i].y},${left[i].acceleration},${right[i].acceleration}")
             }
-
+            drivetrain.setRawDrive(0.0,0.0)
         })
     }
 

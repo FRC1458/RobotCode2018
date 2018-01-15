@@ -124,7 +124,7 @@ interface SmartMotor : Motor, PowerMeasurable {
                     get
                     set(value) {
                         field = value
-                        talon.set(ControlMode.Velocity, degreesPerSecondToTalonVelocity(value)) // TODO test scaling
+                        talon.set(ControlMode.Velocity, value) // TODO test scaling
                     }
 
                 override var brakeMode: BrakeMode = BrakeMode.BRAKE
