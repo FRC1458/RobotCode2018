@@ -61,18 +61,20 @@ class Robot : BaseRobot() {
         //Pathfinder.writeToCSV(file, trajectory)
 
         System.out.println("Path Generation Finished")
+        System.out.println("turtwig is da best")
     }
 
 
     override fun setupAutoModes() {
         addAutoMode(AutoMode.create {
-            val leftTrajectory = Pathfinder.readFromCSV(File("~/test_left_detailed.csv"))
-            val righttTrajectory = Pathfinder.readFromCSV(File("~/test_right_detailed.csv"))
+            val leftTrajectory = Pathfinder.readFromCSV(File("/home/admin/aaaaaa_left_detailed.csv"))
+            val righttTrajectory = Pathfinder.readFromCSV(File("/home/admin/aaaaaa_right_detailed.csv"))
             val startTime = systemTimeMillis
-            while(Math.floor((systemTimeMillis-startTime)/0.05)<leftTrajectory.length()){
-                val i =Math.floor((systemTimeMillis-startTime)/0.05).toInt()
-                drivetrain.setDriveVelocity(leftTrajectory[i].velocity,righttTrajectory[i].velocity)
+            while(Math.floor((systemTimeMillis-startTime)/50.0)<leftTrajectory.length()){
+                val index =Math.floor((systemTimeMillis-startTime)/50.0).toInt()
+                drivetrain.setDriveVelocity(leftTrajectory[index].velocity,righttTrajectory[index].velocity)
                 delay(1)
+                System.out.println("$index,${leftTrajectory[index].velocity},${righttTrajectory[index].velocity},${leftTrajectory.length()},${drivetrain.leftMaster._talonInstance?.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance?.getClosedLoopError(0)}")
             }
             drivetrain.setRawDrive(0.0,0.0)
         })
@@ -196,14 +198,14 @@ class Robot : BaseRobot() {
         /**
          * On Ground 50% Speed
          * [70.72] Avg Left:  3030.286666666667,  StdDev Left: 107.8075035524997
-           [70.72] Avg Right: 3156.7933333333335, StdDev Right: 90.28084305223463
+        [70.72] Avg Right: 3156.7933333333335, StdDev Right: 90.28084305223463
 
          * On Blocks 50% Speed
          * [272.08] Avg Left:  3079.4133333333334,  StdDev Left: 17.38052038602092
-           [272.08] Avg Right: 3314.286666666667, StdDev Right: 12.015732279899654
+        [272.08] Avg Right: 3314.286666666667, StdDev Right: 12.015732279899654
 
          * [339.32] Avg Left:  3049.8866666666668,  StdDev Left: 14.606636239128502
-           [339.32] Avg Right: 3317.9, StdDev Right: 12.644761761298627
+        [339.32] Avg Right: 3317.9, StdDev Right: 12.644761761298627
 
          */
 

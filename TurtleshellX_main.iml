@@ -11,8 +11,8 @@
           <option name="moduleName" value="TurtleshellX" />
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
-          <option name="languageVersion" value="1.1" />
-          <option name="apiVersion" value="1.1" />
+          <option name="languageVersion" value="1.2" />
+          <option name="apiVersion" value="1.2" />
           <option name="pluginOptions">
             <array />
           </option>
@@ -24,7 +24,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/build/classes/java/main" />
+    <output url="file://$MODULE_DIR$/out/production/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/src/main">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
@@ -38,11 +38,11 @@
     <orderEntry type="library" name="Gradle: edu.wpi.first.wpiutil:wpiutil-java:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.opencv:opencv-java:3.2.0" level="project" />
     <orderEntry type="library" name="Gradle: edu.wpi.first.cscore:cscore-java:1.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: openrio.mirror.third.ctre:CTRE-phoenix-java:5.1.2.1" level="project" />
-    <orderEntry type="library" name="Gradle: openrio.mirror.third.kauailabs:navx-java:3.0.342" level="project" />
+    <orderEntry type="library" name="Gradle: openrio.mirror.third.ctre:CTRE-phoenix-java:5.2.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: openrio.mirror.third.kauailabs:navx-java:3.0.346" level="project" />
     <orderEntry type="library" name="Gradle: jaci.pathfinder:Pathfinder-Java:1.8" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.51" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
   </component>
 </module>
