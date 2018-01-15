@@ -1,7 +1,10 @@
 package org.usfirst.frc.team1458.lib.core
 
 import edu.wpi.first.wpilibj.SampleRobot
+import org.usfirst.frc.team1458.lib.util.DataLogger
+import org.usfirst.frc.team1458.lib.util.flow.WaitGroup
 import org.usfirst.frc.team1458.lib.util.flow.delay
+import org.usfirst.frc.team1458.lib.util.flow.go
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 import java.util.*
 
@@ -10,12 +13,14 @@ import java.util.*
  *
  * @author asinghani
  */
-abstract class BaseRobot : SampleRobot(), AutoModeHolder {
+abstract class BaseRobot : SampleRobot, AutoModeHolder {
 
     override val autoModes = ArrayList<AutoMode>()
         get
 
     override var selectedAutoModeIndex = 0
+
+    constructor() : super()
 
     /**
      * Initialize the robot's hardware and basic configuration.
@@ -29,6 +34,7 @@ abstract class BaseRobot : SampleRobot(), AutoModeHolder {
 
     /**
      * Initialize any robot configuration which is time-consuming and must be run on a separate thread.
+     * This is not guaranteed to finish before the robot is enabled
      */
     abstract fun threadedSetup()
 
@@ -57,10 +63,10 @@ abstract class BaseRobot : SampleRobot(), AutoModeHolder {
     }
 
     override fun robotInit() {
-        // TODO Coroutine-ize
         robotSetup()
-        threadedSetup()
         setupAutoModes()
+        go { threadedSetup() }
+
         if (autoModes.isEmpty()) {
             autoModes.add(BlankAutoMode())
         }
@@ -79,6 +85,7 @@ abstract class BaseRobot : SampleRobot(), AutoModeHolder {
         teleopInit()
         while (super.isOperatorControl() && super.isEnabled()) {
             var lastStartMillis = systemTimeMillis
+            DataLogger.currentIterationTimestamp = lastStartMillis
             teleopPeriodic()
             var lastEndMillis = systemTimeMillis
 

@@ -2,7 +2,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.1.51"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2017.10.24b"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.11"
 }
 
 def TEAM = 1458
@@ -31,8 +31,10 @@ dependencies {
     compile wpilib() // Includes WPILib, NetworkTables Core, CameraServer Core, OpenCV
     compile ctre()
     compile navx()
+    compile pathfinder()
 
     compile "org.jetbrains.kotlin:kotlin-stdlib" // Kotlin support
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3"
 }
 
 jar {
@@ -41,5 +43,5 @@ jar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4'
 }
