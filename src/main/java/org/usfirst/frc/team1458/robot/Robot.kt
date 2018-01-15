@@ -4,50 +4,78 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.usfirst.frc.team1458.lib.actuator.SmartMotor
+import org.usfirst.frc.team1458.lib.core.AutoMode
 import org.usfirst.frc.team1458.lib.core.BaseRobot
+import org.usfirst.frc.team1458.lib.drive.TankDrive
 import org.usfirst.frc.team1458.lib.input.Gamepad
 import org.usfirst.frc.team1458.lib.input.interfaces.Switch
+import org.usfirst.frc.team1458.lib.pid.PIDConstants
 import org.usfirst.frc.team1458.lib.util.flow.*
 import java.util.*
+import jaci.pathfinder.Pathfinder
+import jaci.pathfinder.Trajectory
+import jaci.pathfinder.Waypoint
+import jaci.pathfinder.modifiers.TankModifier
+import jaci.pathfinder.followers.EncoderFollower
+import java.io.File
 
 
 class Robot : BaseRobot() {
 
+    var modifier : TankModifier? = null
+
     // TODO: add encoders and enable closed-loop control and tune PID constants
-    /*val drivetrain : TankDrive =
+    val drivetrain : TankDrive =
             TankDrive(SmartMotor.CANtalonSRX(12), SmartMotor.CANtalonSRX(15).inverted,
                     arrayOf(SmartMotor.CANtalonSRX(10),SmartMotor.CANtalonSRX(11)),
                     arrayOf(SmartMotor.CANtalonSRX(13).inverted,SmartMotor.CANtalonSRX(14).inverted),
-                    false, 12.0, 5.0, PIDConstants(0.01, 0.0, 0.0, 0.5))
-    */
+
+                    true, 12.57, 3.0,
+                    pidConstantsLowGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6.5305),
+                    pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6.8777))
+
     val xboxController : Gamepad = Gamepad.xboxController(3)
 
-    var startTime: Double = -1.0
-    var dataListRight = ArrayList<Double>(5000)
-    var dataListLeft = ArrayList<Double>(5000)
-
-    val talonLeft = SmartMotor.CANtalonSRX(12)
-    val talonRight = SmartMotor.CANtalonSRX(15).inverted
-
-    val toggleThing = Switch.toggleSwitch(xboxController.getButton(Gamepad.Button.A))
-
     override fun robotSetup() {
-        SmartMotor.CANtalonSRX(10).follow(talonLeft)
-        SmartMotor.CANtalonSRX(11).follow(talonLeft)
-
-        SmartMotor.CANtalonSRX(13).inverted.follow(talonRight)
-        SmartMotor.CANtalonSRX(14).inverted.follow(talonRight)
 
         //talonLeft.PIDconstants = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6.5305)
         //talonRight.PIDconstants = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6.8777) // TODO change scaling on FF gain
         //talonLeft.PIDconstants = PIDConstants(0.0, kF = 1.0/6530.5)
         //talonRight.PIDconstants = PIDConstants(0.0, kF = 1.0/6877.7)
 
+
+        val points = arrayOf(
+                Waypoint(-4.0, -1.0, Pathfinder.d2r(-45.0)),
+                Waypoint(-2.0, -2.0, 0.0),
+                Waypoint(0.0, 0.0, 0.0)
+        )
+
+        val config = Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 1.0/25.0, 3.5, 1.5, 10.0)
+        val trajectory = Pathfinder.generate(points, config)
+
+        modifier = TankModifier(trajectory).modify(0.5) // TODO add width in meters
+        val file = File("~/path.csv")
+        Pathfinder.writeToCSV(file, trajectory)
+
+        System.out.println("Path Generation Finished")
     }
 
 
     override fun setupAutoModes() {
+        addAutoMode(AutoMode.create {
+            val left = (modifier!!.getLeftTrajectory())
+            val right = (modifier!!.getRightTrajectory())
 
+            val startTime = systemTimeMillis
+            while(true) {
+                val i = Math.floor((systemTimeMillis - startTime)/25.0).toInt()
+                drivetrain.setDriveVelocity(left[i].velocity, right[i].velocity)
+                delay(1)
+                System.out.println("${systemTimeMillis - startTime},${left[i].velocity},${right[i].velocity}," +
+                        "${left[i].x},${left[i].y},${right[i].x},${right[i].y},${left[i].acceleration},${right[i].acceleration}")
+            }
+
+        })
     }
 
 
@@ -57,7 +85,7 @@ class Robot : BaseRobot() {
 
 
     override fun teleopInit() {
-        dataListRight = ArrayList<Double>(5000)
+        /*dataListRight = ArrayList<Double>(5000)
         dataListLeft = ArrayList<Double>(5000)
 
         var i = 0.0
@@ -108,17 +136,21 @@ class Robot : BaseRobot() {
         }
 
         talonLeft.PIDsetpoint = 0.0
-        talonRight.PIDsetpoint = 0.0
+        talonRight.PIDsetpoint = 0.0*/
     }
 
 
     override fun teleopPeriodic() {
 
-        SmartDashboard.putNumber("LeftPos", talonLeft.connectedEncoder.angle)
-        SmartDashboard.putNumber("LeftVel", talonLeft.connectedEncoder.rate)
+        //SmartDashboard.putNumber("LeftPos", talonLeft.connectedEncoder.angle)
+        //SmartDashboard.putNumber("LeftVel", talonLeft.connectedEncoder.rate)
 
-        SmartDashboard.putNumber("RightPos", talonRight.connectedEncoder.angle)
-        SmartDashboard.putNumber("RightVel", talonRight.connectedEncoder.rate)
+        //SmartDashboard.putNumber("RightPos", talonRight.connectedEncoder.angle)
+        //SmartDashboard.putNumber("RightVel", talonRight.connectedEncoder.rate)
+
+
+
+
 
         //talonLeft.speed = 0.5
         //talonRight.speed = 0.5
@@ -133,7 +165,7 @@ class Robot : BaseRobot() {
 
 
         //System.out.println("${systemTimeMillis.toLong()},${talonLeft.PIDsetpoint},${talonLeft.connectedEncoder.rate},${talonRight.PIDsetpoint},${talonRight.connectedEncoder.rate},${talonLeft._talonInstance?.getClosedLoopError(0)},${talonRight._talonInstance?.getClosedLoopError(0)}")
-        System.out.println("$toggleThing")
+        //System.out.println("$toggleThing")
         /*if(xboxController.getButton(Gamepad.Button.LBUMP).triggered) {
             drivetrain.arcadeDrive(xboxController.leftY.value, xboxController.rightX.value)
             return
@@ -213,7 +245,7 @@ class Robot : BaseRobot() {
 
 
     override fun robotDisabled() {
-        startTime = -1.0
+        //startTime = -1.0
     }
 
 }
