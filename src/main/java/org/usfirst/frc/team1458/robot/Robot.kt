@@ -31,8 +31,8 @@ class Robot : BaseRobot() {
                     arrayOf(SmartMotor.CANtalonSRX(13).inverted,SmartMotor.CANtalonSRX(14).inverted),
 
                     true, 12.57, 3.0,
-                    pidConstantsLowGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6.5305),
-                    pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6.8777))
+                    pidConstantsLowGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6530.5),
+                    pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6877.7))
 
     val xboxController : Gamepad = Gamepad.xboxController(3)
 
@@ -67,12 +67,12 @@ class Robot : BaseRobot() {
 
     override fun setupAutoModes() {
         addAutoMode(AutoMode.create {
-            val leftTrajectory = Pathfinder.readFromCSV(File("/home/admin/aaaaaa_left_detailed.csv"))
-            val righttTrajectory = Pathfinder.readFromCSV(File("/home/admin/aaaaaa_right_detailed.csv"))
+            val leftTrajectory = Pathfinder.readFromCSV(File("/home/admin/path1_left_detailed.csv"))
+            val righttTrajectory = Pathfinder.readFromCSV(File("/home/admin/path1_right_detailed.csv"))
             val startTime = systemTimeMillis
             while(Math.floor((systemTimeMillis-startTime)/50.0)<leftTrajectory.length()){
                 val index =Math.floor((systemTimeMillis-startTime)/50.0).toInt()
-                drivetrain.setDriveVelocity(leftTrajectory[index].velocity,righttTrajectory[index].velocity)
+                drivetrain.setDriveVelocity(leftTrajectory[index].velocity/10.0,righttTrajectory[index].velocity/10.0)
                 delay(1)
                 System.out.println("$index,${leftTrajectory[index].velocity},${righttTrajectory[index].velocity},${leftTrajectory.length()},${drivetrain.leftMaster._talonInstance?.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance?.getClosedLoopError(0)},${systemTimeMillis-startTime}")
             }

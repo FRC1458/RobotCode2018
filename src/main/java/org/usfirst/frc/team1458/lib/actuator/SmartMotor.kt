@@ -99,7 +99,7 @@ interface SmartMotor : Motor, PowerMeasurable {
 
                 // TODO test scaling
                 override val connectedEncoder: AngleSensor
-                    get() = AngleSensor.create({( talon.getSelectedSensorPosition(0).toDouble()) },
+                    get() = AngleSensor.create({ (talon.getSelectedSensorPosition(0).toDouble()) },
                             { (talon.getSelectedSensorVelocity(0).toDouble()) })
 
                 override val isEncoderWorking: Boolean
@@ -124,6 +124,7 @@ interface SmartMotor : Motor, PowerMeasurable {
                     get
                     set(value) {
                         field = value
+                        System.out.println(value)
                         talon.set(ControlMode.Velocity, value) // TODO test scaling
                     }
 
