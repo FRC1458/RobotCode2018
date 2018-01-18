@@ -74,7 +74,7 @@ class Robot : BaseRobot() {
                 val index =Math.floor((systemTimeMillis-startTime)/50.0).toInt()
                 drivetrain.setDriveVelocity(leftTrajectory[index].velocity,righttTrajectory[index].velocity)
                 delay(1)
-                System.out.println("$index,${leftTrajectory[index].velocity},${righttTrajectory[index].velocity},${leftTrajectory.length()},${drivetrain.leftMaster._talonInstance?.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance?.getClosedLoopError(0)}")
+                System.out.println("$index,${leftTrajectory[index].velocity},${righttTrajectory[index].velocity},${leftTrajectory.length()},${drivetrain.leftMaster._talonInstance?.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance?.getClosedLoopError(0)},${systemTimeMillis-startTime}")
             }
             drivetrain.setRawDrive(0.0,0.0)
         })
@@ -235,6 +235,8 @@ class Robot : BaseRobot() {
             dataListRight.add((talonRight._talonInstance?.getClosedLoopError(0) ?: 0).toDouble())
             dataListLeft.add((talonLeft._talonInstance?.getClosedLoopError(0) ?: 0).toDouble())
         }*/
+        SmartDashboard.putNumber("left",drivetrain.leftMaster.connectedEncoder.angle)
+        SmartDashboard.putNumber("right",drivetrain.rightMaster.connectedEncoder.angle)
 
 
 

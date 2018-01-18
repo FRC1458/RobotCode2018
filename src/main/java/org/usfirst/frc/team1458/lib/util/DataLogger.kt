@@ -7,7 +7,13 @@ object DataLogger {
     private val data: MutableMap<String, MutableList<Pair<Double, Double>>> = HashMap()
     private val timestamps: MutableSet<Double> = HashSet()
 
+    private val currentIterationPlaced: MutableSet<String> = HashSet()
+
     var currentIterationTimestamp: Double = 0.0
+        set(value) {
+            field = value
+            currentIterationPlaced.clear()
+        }
 
     fun addKey(key: String) {
         data[key] = ArrayList()
@@ -18,8 +24,21 @@ object DataLogger {
             addKey(key)
         }
 
-        data[key]!!.add(Pair(timestamp, value))
-        timestamps.add(timestamp)
+        if(currentIterationPlaced.add(key)) {
+            data[key]!!.add(Pair(timestamp, value))
+            timestamps.add(timestamp)
+        } else {
+            Logger.w("DataLogger", "Multiple logs for same key $key in single iteration")
+        }
+    }
+
+    fun endTeleop() {
+        for(key in data.keys) {
+            if(!currentIterationPlaced.contains(key)) {
+                Logger.w("DataLogger", "No logs for key $key in single iteration. Adding previous value")
+                data[key]!!.add(Pair(currentIterationTimestamp, data[key]!!.last().second))
+            }
+        }
     }
 
     /*fun putValue(key: String, value: Int, timestamp: Double) = putValue(key, value.toDouble(), timestamp)

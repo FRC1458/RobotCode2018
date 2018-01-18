@@ -87,6 +87,7 @@ abstract class BaseRobot : SampleRobot, AutoModeHolder {
             var lastStartMillis = systemTimeMillis
             DataLogger.currentIterationTimestamp = lastStartMillis
             teleopPeriodic()
+            DataLogger.endTeleop()
             var lastEndMillis = systemTimeMillis
 
             var nextStartMillis : Double = lastStartMillis
