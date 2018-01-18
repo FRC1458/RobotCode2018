@@ -75,18 +75,7 @@ class Robot : BaseRobot() {
 
 
     override fun setupAutoModes() {
-        addAutoMode(AutoMode.create {
-            val leftTrajectory = Pathfinder.readFromCSV(File("/home/admin/path1_left_detailed.csv"))
-            val righttTrajectory = Pathfinder.readFromCSV(File("/home/admin/path1_right_detailed.csv"))
-            val startTime = systemTimeMillis
-            while(Math.floor((systemTimeMillis-startTime)/50.0)<leftTrajectory.length()){
-                val index =Math.floor((systemTimeMillis-startTime)/50.0).toInt()
-                drivetrain.setDriveVelocity(leftTrajectory[index].velocity/10.0,righttTrajectory[index].velocity/10.0)
-                delay(1)
-                System.out.println("$index,${leftTrajectory[index].velocity},${righttTrajectory[index].velocity},${leftTrajectory.length()},${drivetrain.leftMaster._talonInstance?.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance?.getClosedLoopError(0)},${systemTimeMillis-startTime}")
-            }
-            drivetrain.setRawDrive(0.0,0.0)
-        })
+
     }
 
 
