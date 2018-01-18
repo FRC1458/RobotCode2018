@@ -128,8 +128,7 @@ class TankDrive(val leftMaster: SmartMotor, val rightMaster: SmartMotor,
 
     fun setDriveVelocity(left: Double, right: Double, forwardSpeed: Double? = null) {
         if(wheelCircumference != null) {
-            leftMaster.PIDsetpoint = left //* (360.0 / wheelCircumference)  // Calculate deg/sec from meters/sec
-
+            leftMaster.PIDsetpoint = left //* (360.0 / wheelCircumference)  // Calculate deg/sec from meters/sec // TODO: fix scaling stuff
             rightMaster.PIDsetpoint = right// * (360.0 / wheelCircumference) // Calculate deg/sec from meters/sec
 
             if(shiftDownSpeed != null && shiftUpSpeed != null && forwardSpeed != null && canAutoShift) {
@@ -140,7 +139,6 @@ class TankDrive(val leftMaster: SmartMotor, val rightMaster: SmartMotor,
 
     fun setRawDrive(left: Double, right: Double, forwardSpeed: Double? = null) {
         leftMaster.speed = left
-
         rightMaster.speed = right
 
         if(forwardSpeed != null && canAutoShift && closedLoopScaling != null) {

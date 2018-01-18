@@ -8,7 +8,7 @@ import java.io.File
 
 
 class SplineFollower(leftCSV: String, rightCSV: String, val drivetrain: TankDrive, dt: Double? = null,
-                     name: String = "Spline_" + leftCSV.split("/").last().replace("left", ""),) : BaseAutoMode() {
+                     name: String = "Spline_" + leftCSV.split("/").last().replace("left", "")) : BaseAutoMode() {
     val left = Pathfinder.readFromCSV(File(leftCSV))
     val right = Pathfinder.readFromCSV(File(rightCSV))
 
@@ -22,7 +22,8 @@ class SplineFollower(leftCSV: String, rightCSV: String, val drivetrain: TankDriv
 
         while(getIndex() < left.length()){
             val index = getIndex()
-            drivetrain.setDriveVelocity(left[index].velocity / 10.0, right[index].velocity / 10.0) // TODO: add gyro for better following
+            // TODO: add gyro - https://github.com/JacisNonsense/Pathfinder/wiki/Pathfinder-for-FRC---Java#tank-drive
+            drivetrain.setDriveVelocity(left[index].velocity / 10.0, right[index].velocity / 10.0)
             delay(1)
         }
         drivetrain.setRawDrive(0.0,0.0)
