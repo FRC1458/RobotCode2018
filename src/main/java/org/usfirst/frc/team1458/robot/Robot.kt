@@ -17,6 +17,8 @@ import jaci.pathfinder.Trajectory
 import jaci.pathfinder.Waypoint
 import jaci.pathfinder.modifiers.TankModifier
 import jaci.pathfinder.followers.EncoderFollower
+import org.usfirst.frc.team1458.lib.input.FlightStick
+import org.usfirst.frc.team1458.lib.sensor.NavX
 import java.io.File
 
 
@@ -30,11 +32,18 @@ class Robot : BaseRobot() {
                     arrayOf(SmartMotor.CANtalonSRX(10),SmartMotor.CANtalonSRX(11)),
                     arrayOf(SmartMotor.CANtalonSRX(13).inverted,SmartMotor.CANtalonSRX(14).inverted),
 
-                    true, 12.57, 3.0,
+                    true, 12.57, 6000.0,
                     pidConstantsLowGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6530.5),
                     pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6877.7))
 
-    val xboxController : Gamepad = Gamepad.xboxController(3)
+    val steer : FlightStick = FlightStick.flightStick(0)
+    val throttle : FlightStick = FlightStick.flightStick(1)
+
+    val steerAxis = steer.rollAxis
+    val throttleAxis = throttle.pitchAxis.scale { it * 0.4 }.inverted
+    val quickTurnButton = throttle.trigger
+
+    val navX = NavX.Micro_I2C()
 
     override fun robotSetup() {
 
@@ -240,6 +249,22 @@ class Robot : BaseRobot() {
 
 
 
+        SmartDashboard.putNumber("Yaw Angle", navX.yaw.angle)
+        SmartDashboard.putNumber("Yaw Rate", navX.yaw.rate)
+        SmartDashboard.putNumber("Yaw Heading", navX.yaw.heading)
+
+        SmartDashboard.putNumber("Pitch Angle", navX.pitch.angle)
+        SmartDashboard.putNumber("Pitch Rate", navX.pitch.rate)
+        SmartDashboard.putNumber("Pitch Heading", navX.pitch.heading)
+
+        SmartDashboard.putNumber("Roll Angle", navX.roll.angle)
+        SmartDashboard.putNumber("Roll Rate", navX.roll.rate)
+        SmartDashboard.putNumber("Roll Heading", navX.roll.heading)
+
+        SmartDashboard.putBoolean("IsMoving", navX.isMoving)
+        SmartDashboard.putBoolean("IsRotating", navX.isRotating)
+
+        drivetrain.arcadeDrive(throttleAxis.value, steerAxis.value)//, quickTurnButton.triggered)
     }
 
 
