@@ -14,7 +14,7 @@ C = [1   0];
 D = 0;
 
 % Create system
-sys = ss(A, B, C, D);
+sys = s s(A, B, C, D);
 
 [u,t] = gensig('square',5,30,0.1);
 lsim(sys,u,t)
