@@ -55,7 +55,7 @@ interface SmartMotor : Motor, PowerMeasurable {
     }
 
     companion object {
-        fun CANtalonSRX(canID: Int, ticksPerRotation: Double = 1024.0): SmartMotor {
+        fun CANtalonSRX(canID: Int, ticksPerRotation: Double = 1024.0, unitScaling: Boolean = true): SmartMotor {
             val timeoutMs = 20
 
             val talon : TalonSRX = TalonSRX(canID)
@@ -99,8 +99,13 @@ interface SmartMotor : Motor, PowerMeasurable {
 
                 // TODO test scaling
                 override val connectedEncoder: AngleSensor
-                    get() = AngleSensor.create({ (talon.getSelectedSensorPosition(0).toDouble()) },
-                            { (talon.getSelectedSensorVelocity(0).toDouble()) })
+                    get() = if(unitScaling) {
+                        AngleSensor.create({ talonRotationsToDegrees(talon.getSelectedSensorPosition(0).toDouble()) },
+                                { talonVelocityToDegreesPerSecond(talon.getSelectedSensorVelocity(0).toDouble()) })
+                    } else {
+                        AngleSensor.create({ (talon.getSelectedSensorPosition(0).toDouble()) },
+                                { (talon.getSelectedSensorVelocity(0).toDouble()) })
+                    }
 
                 override val isEncoderWorking: Boolean
                     get() = if(Math.abs(speed) > 0.25 || Math.abs(PIDsetpoint) > 50) { Math.abs(connectedEncoder.rate) > 0.001 } else { true }
@@ -124,8 +129,11 @@ interface SmartMotor : Motor, PowerMeasurable {
                     get
                     set(value) {
                         field = value
-                        System.out.println(value)
-                        talon.set(ControlMode.Velocity, value) // TODO test scaling
+                        if(unitScaling) {
+                            talon.set(ControlMode.Velocity, degreesPerSecondToTalonVelocity(value)) // TODO test scaling
+                        } else {
+                            talon.set(ControlMode.Velocity, (value))
+                        }
                     }
 
                 override var brakeMode: BrakeMode = BrakeMode.BRAKE

@@ -1,11 +1,16 @@
 package org.usfirst.frc.team1458.lib.util
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths
+import org.usfirst.frc.team1458.lib.util.maths.format
 import java.util.*
 
 object DataLogger {
     private val data: MutableMap<String, MutableList<Pair<Double, Double>>> = HashMap()
     private val timestamps: MutableSet<Double> = HashSet()
+
+    val keys: Set<String>
+        get() = data.keys
 
     private val currentIterationPlaced: MutableSet<String> = HashSet()
 
@@ -27,6 +32,7 @@ object DataLogger {
         if(currentIterationPlaced.add(key)) {
             data[key]!!.add(Pair(timestamp, value))
             timestamps.add(timestamp)
+            SmartDashboard.putNumber(key, value)
         } else {
             Logger.w("DataLogger", "Multiple logs for same key $key in single iteration")
         }
@@ -66,6 +72,16 @@ object DataLogger {
         return data[key]?.map { it.second }
     }
 
+    fun getMax(key: String): Double? {
+        val data = getData(key)
+        return if (data == null) { null } else { data.reduce({ acc, d -> Math.max(acc, d) }) / data.size }
+    }
+
+    fun getMin(key: String): Double? {
+        val data = getData(key)
+        return if (data == null) { null } else { data.reduce({ acc, d -> Math.min(acc, d) }) / data.size }
+    }
+
     fun getAverage(key: String): Double? {
         val data = getData(key)
         return if (data == null) { null } else { data.reduce({ acc, d -> (acc + d) }) / data.size }
@@ -76,7 +92,35 @@ object DataLogger {
         return if (data == null) { null } else { TurtleMaths.calculateSD(data) }
     }
 
+    fun getAllStats(key: String): String? {
+        val data = getData(key)
+        return if (data == null) { null } else {
+            "min/avg/max/stddev = ${getMin(key)?.format(3)}/${getAverage(key)?.format(3)}/" +
+                    "${getMax(key)?.format(3)}/${getStdDev(key)?.format(3)}"
+        }
+    }
+
     fun getCSV(keys: Array<String>): String? {
-        return null // TODO finishg
+        var str: String = ""
+
+        // Header
+        str += "timestamp,"
+        for(key in keys) {
+            str += key.replace(" ", "_").toLowerCase() + ","
+        }
+        str = str.removeSuffix(",") + "\n"
+
+        // Data
+        for(timestamp in timestamps) {
+            str += "${timestamp.toLong()},"
+            for(key in keys) {
+                val d = data[key]!!
+                str += d[d.indexOfFirst { it.first == timestamp }].second.format(3) + ","
+            }
+            str = str.removeSuffix(",") + "\n"
+        }
+        str = str.removeSuffix("\n")
+
+        return str
     }
 }
