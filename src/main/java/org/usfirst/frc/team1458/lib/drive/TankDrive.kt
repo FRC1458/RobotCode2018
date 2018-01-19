@@ -20,21 +20,33 @@ import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
  * @param shifter Shifter for high/low gear (extended is high gear, retracted is low)
  * @param pidConstantsLowGear Default PID constants (used for low gear if using shifter)
  * @param pidConstantsHighGear PID constants for high gear
- * @param wheelCircumference Circumference of the wheels (in meters)
+ * @param wheelDiameter Diameter of the wheels
  * @param closedLoopScaling Scale between [-1.0, 1.0] and actual closed-loop velocity (meters/second) for driver control
  */
-class TankDrive(val leftMaster: SmartMotor, val rightMaster: SmartMotor,
-                val leftMotors: Array<SmartMotor> = arrayOf(), val rightMotors: Array<SmartMotor> = arrayOf(),
+class TankDrive(val leftMaster: SmartMotor,
+                val rightMaster: SmartMotor,
+                val leftMotors: Array<SmartMotor> = arrayOf(),
+                val rightMotors: Array<SmartMotor> = arrayOf(),
 
                 // Closed Loop Control
-                var closedLoopControl: Boolean = false, val wheelCircumference: Double? = null,
-                val closedLoopScaling: Double? = null, pidConstantsLowGearLeft: PIDConstants? = null, pidConstantsLowGearRight: PIDConstants? = null,
+                var closedLoopControl: Boolean = false,
+                wheelDiameter: Double? = null,
+                val closedLoopScaling: Double? = null,
+                pidConstantsLowGearLeft: PIDConstants? = null,
+                pidConstantsLowGearRight: PIDConstants? = null,
 
                 // Shifter
-                var shifter: Solenoid? = null, pidConstantsHighGearLeft: PIDConstants? = null, pidConstantsHighGearRight: PIDConstants? = null, val autoShift: Boolean = false,
-                val shiftUpSpeed: Double? = null, val shiftDownSpeed: Double? = null, val shiftCooldown: Double = 0.0,
+                var shifter: Solenoid? = null,
+                pidConstantsHighGearLeft: PIDConstants? = null,
+                pidConstantsHighGearRight: PIDConstants? = null,
+                val autoShift: Boolean = false,
+                val shiftUpSpeed: Double? = null,
+                val shiftDownSpeed: Double? = null,
+                val shiftCooldown: Double = 0.0,
 
                 var gyro: AngleSensor? = null) {
+
+    val wheelCircumference = wheelDiameter?.times(Math.PI)
 
     var pidConstantsLowGearLeft = pidConstantsLowGearLeft
         set(value) {

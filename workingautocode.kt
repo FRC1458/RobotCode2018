@@ -30,3 +30,56 @@
             }
 
         })*/
+
+/*dataListRight = ArrayList<Double>(5000)
+        dataListLeft = ArrayList<Double>(5000)
+
+        var i = 0.0
+        while(i < 3000.0) {
+            i += 100.0
+            delay(30)
+            talonLeft.PIDsetpoint = i
+            talonRight.PIDsetpoint = i
+        }
+
+        talonLeft.PIDsetpoint = 3000.0
+        talonRight.PIDsetpoint = 3000.0
+
+        delay(3200)
+
+        i = 3000.0
+        while(i > 0) {
+            i -= 100.0
+            delay(30)
+            talonLeft.PIDsetpoint = i
+            talonRight.PIDsetpoint = i
+        }
+
+        talonLeft.PIDsetpoint = 0.0
+        talonRight.PIDsetpoint = 0.0
+
+        delay(2000)
+
+        i = 0.0
+        while(i < 3000.0) {
+            i += 100.0
+            delay(30)
+            talonLeft.PIDsetpoint = -i
+            talonRight.PIDsetpoint = -i
+        }
+
+        talonLeft.PIDsetpoint = -3000.0
+        talonRight.PIDsetpoint = -3000.0
+
+        delay(3200)
+
+        i = 3000.0
+        while(i > 0) {
+            i -= 100.0
+            delay(30)
+            talonLeft.PIDsetpoint = -i
+            talonRight.PIDsetpoint = -i
+        }
+
+        talonLeft.PIDsetpoint = 0.0
+        talonRight.PIDsetpoint = 0.0*/
