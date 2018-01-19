@@ -9,7 +9,7 @@ import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 import java.io.File
 
 
-class SplineFollower(leftCSV: String, rightCSV: String, val drivetrain: TankDrive, dt: Double? = null, val gyro: AngleSensor? = null,
+class SplineFollower(leftCSV: String, rightCSV: String, val drivetrain: TankDrive, dt: Double? = null, val gyro: AngleSensor? = null, val gyro_kP: Double? = null,
                      name: String = "Spline_" + leftCSV.split("/").last().replace("left", "")) : BaseAutoMode() {
     val left = Pathfinder.readFromCSV(File(leftCSV))
     val right = Pathfinder.readFromCSV(File(rightCSV))
@@ -25,8 +25,19 @@ class SplineFollower(leftCSV: String, rightCSV: String, val drivetrain: TankDriv
         while(getIndex() < (left.length())) {
             AutoDataLogger.currentIterationTimestamp = systemTimeMillis
             val index = getIndex()
-            // TODO: add gyro - https://github.com/JacisNonsense/Pathfinder/wiki/Pathfinder-for-FRC---Java#tank-drive
-            drivetrain.setDriveVelocity(left[index].velocity, right[index].velocity)
+
+            var leftVel = left[index].velocity
+            var rightVel = right[index].velocity
+
+            if(gyro != null && gyro_kP != null) {
+                val angleError = Pathfinder.boundHalfDegrees(Pathfinder.r2d(left[index].heading) - gyro.heading)
+                val turnAdjustment = gyro_kP * angleError
+
+                leftVel -= turnAdjustment
+                rightVel += turnAdjustment
+            }
+
+            drivetrain.setDriveVelocity(leftVel, rightVel)
 
             AutoDataLogger.putValue("Left Position", left[index].position)
             AutoDataLogger.putValue("Right Position", right[index].position)
