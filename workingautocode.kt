@@ -4,7 +4,7 @@
 
             val startTime = systemTimeMillis
             while(true) {
-                val i = Math.floor((systemTimeMillis - startTime)/25.0).toInt()
+                val i = Math.floor((systemTimeMillis - startTime)/50.0).toInt()
                 drivetrain.setDriveVelocity(left[i].velocity, right[i].velocity)
                 delay(1)
                 System.out.println("${systemTimeMillis - startTime},${left[i].velocity},${right[i].velocity}," +

@@ -139,6 +139,7 @@ class TankDrive(val leftMaster: SmartMotor,
     }
 
     fun setDriveVelocity(left: Double, right: Double, forwardSpeed: Double? = null) {
+        //System.out.println("leftVel = $left, rightVel = $right")
         if(wheelCircumference != null) {
             leftMaster.PIDsetpoint = left * (360.0 / wheelCircumference)
             rightMaster.PIDsetpoint = right * (360.0 / wheelCircumference)
@@ -175,9 +176,9 @@ class TankDrive(val leftMaster: SmartMotor,
 
     fun arcadeDrive(forward: Double, turn: Double) {
         if(closedLoopControl && closedLoopReady && closedLoopScaling != null) {
-            setDriveVelocity((forward - turn) * closedLoopScaling, (forward + turn) * closedLoopScaling, forward * closedLoopScaling)
+            setDriveVelocity((forward + turn) * closedLoopScaling, (forward - turn) * closedLoopScaling, forward * closedLoopScaling)
         } else {
-            setRawDrive(forward - turn, forward + turn, forward)
+            setRawDrive(forward + turn, forward - turn, forward)
         }
     }
 

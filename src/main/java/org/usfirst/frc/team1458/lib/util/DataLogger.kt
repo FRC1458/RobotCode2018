@@ -14,6 +14,8 @@ object DataLogger {
 
     private val currentIterationPlaced: MutableSet<String> = HashSet()
 
+    var useSmartDashboard = true
+
     var currentIterationTimestamp: Double = 0.0
         set(value) {
             field = value
@@ -32,7 +34,10 @@ object DataLogger {
         if(currentIterationPlaced.add(key)) {
             data[key]!!.add(Pair(timestamp, value))
             timestamps.add(timestamp)
-            SmartDashboard.putNumber(key, value)
+
+            if(useSmartDashboard) {
+                SmartDashboard.putNumber(key, value)
+            }
         } else {
             Logger.w("DataLogger", "Multiple logs for same key $key in single iteration")
         }

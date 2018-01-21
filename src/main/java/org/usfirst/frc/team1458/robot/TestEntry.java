@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1458.robot;
 
 public class TestEntry {
-	/*public static void main(String[] args) {
-		Robot.Companion.main(args);
-	}*/
+	public static void main(String[] args) {
+		TestThing.Companion.main(args);
+	}
 }
