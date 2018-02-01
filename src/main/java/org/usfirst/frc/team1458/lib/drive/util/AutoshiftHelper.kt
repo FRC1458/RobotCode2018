@@ -6,6 +6,9 @@ import org.usfirst.frc.team1458.lib.util.Debouncer
 /**
  * Manages auto-shifter for drivetrain
  *
+ * Based on FRC449's implementation (see https://github.com/blair-robot-project/449-central-repo/blob/master/RoboRIO/src/main/java/org/usfirst/frc/team449/robot/components/AutoshiftComponent.java)
+ * Dispensation to use and distribute under BSD has been obtained from Oblarg.
+ *
  * @param upshiftSpeed Speed threshold for shifting up
  * @param downshiftSpeed Speed threshold for shifting down
  * @param shiftCooldown Cooldown between shifts in seconds. Zero by default
