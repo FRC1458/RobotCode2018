@@ -182,14 +182,14 @@ class TankDrive(val leftMaster: SmartMotor,
         }
     }
 
-    fun scaledArcadeDrive(forward: Double, turn: Double, quickturn: Boolean = false, scaleFun : (Double) -> Double = { 0.6 * Math.pow(it, 0.5) + 0.2 }) {
+    fun scaledArcadeDrive(forward: Double, turn: Double, quickturn: Boolean = false) {
         if(quickturn) {
             arcadeDrive(forward, turn)
         } else {
             if(closedLoopControl && closedLoopReady && closedLoopScaling != null) {
-                setDriveVelocity((forward - turn * scaleFun(forward)) * closedLoopScaling, (forward + turn * scaleFun(forward)) * closedLoopScaling, forward * closedLoopScaling)
+                setDriveVelocity((forward + turn * forward) * closedLoopScaling, (forward - turn * forward) * closedLoopScaling, forward * closedLoopScaling)
             } else {
-                setRawDrive(forward - turn * scaleFun(forward), forward + turn * scaleFun(forward), forward)
+                setRawDrive(forward + turn * forward, forward - turn * forward, forward)
             }
         }
     }

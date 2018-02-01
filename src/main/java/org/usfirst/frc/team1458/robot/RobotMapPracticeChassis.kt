@@ -19,5 +19,5 @@ class RobotMapPracticeChassis: IRobotMap {
             pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6877.7)
     )
 
-    override val navX = NavX.Micro_I2C()
+     //val navX = NavX.Micro_I2C()
 }
