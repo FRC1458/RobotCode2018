@@ -5,6 +5,7 @@ import org.usfirst.frc.team1458.lib.core.BaseRobot
 import jaci.pathfinder.Pathfinder
 import jaci.pathfinder.Trajectory
 import jaci.pathfinder.Waypoint
+import org.usfirst.frc.team1458.lib.actuator.Compressor
 import org.usfirst.frc.team1458.lib.core.AutoMode
 import org.usfirst.frc.team1458.lib.pathfinding.SplineFollower
 import org.usfirst.frc.team1458.lib.util.flow.delay
@@ -14,18 +15,20 @@ import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 class Robot : BaseRobot() {
 
     val oi = OI()
-    val robot = RobotMapPracticeChassis()
+    val robot = RobotMapFinalChassis()
 
     var drivingSpline = false
     //var driveToExchange : DriveToExchange = DriveToExchange()
 
     override fun robotSetup() {
-        
+        Compressor().start()
     }
 
 
     override fun setupAutoModes() {
         addAutoMode(AutoMode.create {
+            robot.drivetrain.tankDrive(0.0, 0.0)
+            delay(500)
             SplineFollower (
                     leftCSV = if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
                         "/home/admin/pathleft_left_detailed.csv"
@@ -38,7 +41,7 @@ class Robot : BaseRobot() {
                         "/home/admin/pathright_right_detailed.csv"
                     },
                     drivetrain = robot.drivetrain,
-                    gyro = robot.navX.yaw,
+                    //gyro = robot.navX.yaw,
                     gyro_kP = -0.12,
                     name = "OwnSwitch",
                     stopFunc = { !(isAutonomous && isEnabled) }
@@ -83,7 +86,7 @@ class Robot : BaseRobot() {
         SmartDashboard.putNumber("left rate", robot.drivetrain.leftMaster.connectedEncoder.rate * Math.PI * 1.11 / 360.0)
         SmartDashboard.putNumber("right rate", robot.drivetrain.rightMaster.connectedEncoder.rate * Math.PI * 1.11 / 360.0)
 
-        SmartDashboard.putNumber("Yaw Angle", robot.navX.yaw.angle)
+       /* SmartDashboard.putNumber("Yaw Angle", robot.navX.yaw.angle)
         SmartDashboard.putNumber("Yaw Rate", robot.navX.yaw.rate)
         SmartDashboard.putNumber("Yaw Heading", robot.navX.yaw.heading)
 
@@ -96,18 +99,19 @@ class Robot : BaseRobot() {
         SmartDashboard.putNumber("Roll Heading", robot.navX.roll.heading)
 
         SmartDashboard.putBoolean("IsMoving", robot.navX.isMoving)
-        SmartDashboard.putBoolean("IsRotating", robot.navX.isRotating)
-        SmartDashboard.putNumber("WheelOut", oi.steerAxis.value)
+        SmartDashboard.putBoolean("IsRotating", robot.navX.isRotating)*/
+        //SmartDashboard.putNumber("WheelOut", oi.steerAxis.value)
 
-        if(oi.autoButton.triggered) {
+        /*if(oi.autoButton.triggered) {
             if(!drivingSpline) {
                 drivingSpline = true
 
 
             }
         } else {
-            robot.drivetrain.cheesyDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickTurnButton.triggered)
-        }
+            robot.drivetrain.tankDrive(oi.xbox.leftY.value, oi.xbox.rightY.value)
+        }*/
+        robot.drivetrain.tankDrive(oi.xbox.leftY.value, oi.xbox.rightY.value)
     }
 
 
@@ -117,6 +121,7 @@ class Robot : BaseRobot() {
 
     override fun robotDisabled() {
         //startTime = -1.0
+        robot.drivetrain.tankDrive(0.0, 0.0)
     }
 
 }
