@@ -4,15 +4,11 @@ import org.usfirst.frc.team1458.lib.actuator.SmartMotor
 import org.usfirst.frc.team1458.lib.pid.PID
 import org.usfirst.frc.team1458.lib.pid.PIDConstants
 
-class Lift(tar:Double, liftMotor: SmartMotor) {
-    var tar:Double = tar
-    set(value)
-    {
-        field = value
-        pid.target=tar
-    }
+class Lift(val liftMotor: SmartMotor) {
     val constants = PIDConstants(0.0,0.0,0.0,0.0, { 0.0 })
-    val pid: PID = PID(constants,tar)
+    fun setLift(tar: Double){
+        liftMotor.PIDsetpoint = tar
+    }
 
 
 
