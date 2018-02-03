@@ -15,7 +15,7 @@ import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 class Robot : BaseRobot() {
 
     val oi = OI()
-    val robot = RobotMapFinalChassis()
+    val robot = RobotMapPracticeChassis()
 
     var drivingSpline = false
     //var driveToExchange : DriveToExchange = DriveToExchange()
@@ -111,7 +111,13 @@ class Robot : BaseRobot() {
         } else {
             robot.drivetrain.tankDrive(oi.xbox.leftY.value, oi.xbox.rightY.value)
         }*/
-        robot.drivetrain.tankDrive(oi.xbox.leftY.value, oi.xbox.rightY.value)
+        when {
+            oi.driveStraightButton.triggered -> robot.drivetrain.tankDrive(oi.rightAxis.value, oi.rightAxis.value)
+            oi.turnButton.triggered -> robot.drivetrain.tankDrive(oi.leftAxis.value, -oi.leftAxis.value)
+            else -> robot.drivetrain.tankDrive(oi.leftAxis.value, oi.rightAxis.value)
+        }
+
+        //robot.drivetrain.scaledArcadeDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickturnButton.triggered)
     }
 
 

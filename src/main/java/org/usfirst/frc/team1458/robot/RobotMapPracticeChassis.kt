@@ -13,7 +13,7 @@ class RobotMapPracticeChassis: IRobotMap {
             rightMotors = arrayOf(SmartMotor.CANtalonSRX(13), SmartMotor.CANtalonSRX(14)).map { it.inverted }.toTypedArray(),
             closedLoopControl = true,
             wheelDiameter = 0.354,
-            closedLoopScaling = 18.0, // Max speed = 6 ft/sec
+            closedLoopScaling = 9.0,
 
             pidConstantsLowGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6530.5),
             pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6877.7)

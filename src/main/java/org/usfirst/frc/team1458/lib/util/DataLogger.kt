@@ -110,13 +110,13 @@ object DataLogger {
 
         // Header
         str += "timestamp,"
-        for(key in keys) {
+        for(key in keys.sortedArray()) {
             str += key.replace(" ", "_").toLowerCase() + ","
         }
         str = str.removeSuffix(",") + "\n"
 
         // Data
-        for(timestamp in timestamps) {
+        for(timestamp in timestamps.sorted()) {
             str += "${timestamp.toLong()},"
             for(key in keys) {
                 val d = data[key]!!
