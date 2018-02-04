@@ -8,6 +8,7 @@ import jaci.pathfinder.Waypoint
 import org.usfirst.frc.team1458.lib.actuator.Compressor
 import org.usfirst.frc.team1458.lib.core.AutoMode
 import org.usfirst.frc.team1458.lib.pathfinding.SplineFollower
+import org.usfirst.frc.team1458.lib.util.SoundPlayer
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 
@@ -22,10 +23,12 @@ class Robot : BaseRobot() {
 
     override fun robotSetup() {
         Compressor().start()
+        SmartDashboard.putString("Arcade", "a")
     }
 
 
     override fun setupAutoModes() {
+        SoundPlayer.play("robotenabled")
         addAutoMode(AutoMode.create {
             robot.drivetrain.tankDrive(0.0, 0.0)
             delay(500)
@@ -73,13 +76,24 @@ class Robot : BaseRobot() {
 
 
     override fun teleopInit() {
-
+        SoundPlayer.play("robotenabled")
     }
 
 
     override fun teleopPeriodic() {
+        //SmartDashboard.putNumber("leftJ", oi.leftAxis.value)
+        //SmartDashboard.putNumber("rightJ", oi.rightAxis.value)
+
         SmartDashboard.putNumber("left", robot.drivetrain.leftMaster.connectedEncoder.angle)
         SmartDashboard.putNumber("right", robot.drivetrain.rightMaster.connectedEncoder.angle)
+
+        // Hacky stuff
+        if(robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble() > 2500.0) {
+            robot.drivetrain.leftMaster._talonInstance!!.setIntegralAccumulator(0.0, 0, 20)
+        }
+        if(robot.drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble() > 2500.0) {
+            robot.drivetrain.rightMaster._talonInstance!!.setIntegralAccumulator(0.0, 0, 20)
+        }
 
         SmartDashboard.putNumber("lefterror", robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
         SmartDashboard.putNumber("righterror", robot.drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
@@ -111,13 +125,17 @@ class Robot : BaseRobot() {
         } else {
             robot.drivetrain.tankDrive(oi.xbox.leftY.value, oi.xbox.rightY.value)
         }*/
-        when {
-            oi.driveStraightButton.triggered -> robot.drivetrain.tankDrive(oi.rightAxis.value, oi.rightAxis.value)
-            oi.turnButton.triggered -> robot.drivetrain.tankDrive(oi.leftAxis.value, -oi.leftAxis.value)
-            else -> robot.drivetrain.tankDrive(oi.leftAxis.value, oi.rightAxis.value)
+        if(SmartDashboard.getString("Arcade", "a") == "a") {
+            robot.drivetrain.cheesyDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickturnButton.triggered)
+        } else {
+            when {
+                oi.driveStraightButton.triggered -> robot.drivetrain.tankDrive(oi.rightAxis.value, oi.rightAxis.value)
+                oi.turnButton.triggered -> robot.drivetrain.tankDrive(oi.leftAxis.value, -oi.leftAxis.value)
+                else -> robot.drivetrain.tankDrive(oi.leftAxis.value, oi.rightAxis.value)
+            }
         }
 
-        //robot.drivetrain.scaledArcadeDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickturnButton.triggered)
+        //
     }
 
 
@@ -128,6 +146,7 @@ class Robot : BaseRobot() {
     override fun robotDisabled() {
         //startTime = -1.0
         robot.drivetrain.tankDrive(0.0, 0.0)
+        SoundPlayer.play("robotdisabled")
     }
 
 }

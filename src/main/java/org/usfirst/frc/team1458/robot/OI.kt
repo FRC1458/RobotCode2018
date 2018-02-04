@@ -19,9 +19,9 @@ class OI {
     var driveStraightButton = rightStick.trigger
     var turnButton = leftStick.trigger
 
-    /*var steerAxis = leftStick.rollAxis.scale(0.70)
+    var steerAxis = leftStick.rollAxis.scale(0.35)
     var throttleAxis = rightStick.pitchAxis.inverted
-    var quickturnButton = rightStick.trigger*/
+    var quickturnButton = rightStick.trigger
 
     //val steerAxis = steer.steering.scale { 0.5 * it } //.scale { if(it >= -0.195 && it <= 0.024) { 0.0 } else { it } }
     /*val steerAxis = throttle.rollAxis.scale { 0.35 * it }

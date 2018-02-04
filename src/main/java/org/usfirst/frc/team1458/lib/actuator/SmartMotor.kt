@@ -129,6 +129,7 @@ interface SmartMotor : Motor, PowerMeasurable {
                     get
                     set(value) {
                         //System.out.println("PIDsetpoint = " + value)
+
                         field = value
                         if(unitScaling) {
                             talon.set(ControlMode.Velocity, degreesPerSecondToTalonVelocity(value)) // TODO test scaling
