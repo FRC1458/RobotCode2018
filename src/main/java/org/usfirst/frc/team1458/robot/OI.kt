@@ -10,8 +10,18 @@ import org.usfirst.frc.team1458.lib.input.SteeringWheel
  */
 class OI {
     //val steer : SteeringWheel = SteeringWheel.logitechSteeringWheel(0)
-    //val throttle : FlightStick = FlightStick.flightStick(1)
-    val xbox : Gamepad = Gamepad.xboxController(3)
+    val leftStick : FlightStick = FlightStick.flightStick(0)
+    val rightStick : FlightStick = FlightStick.flightStick(1)
+    //val xbox : Gamepad = Gamepad.xboxController(3)
+
+    var leftAxis = leftStick.pitchAxis.inverted
+    var rightAxis = rightStick.pitchAxis.inverted
+    var driveStraightButton = rightStick.trigger
+    var turnButton = leftStick.trigger
+
+    var steerAxis = leftStick.rollAxis.scale(0.35)
+    var throttleAxis = rightStick.pitchAxis.inverted
+    var quickturnButton = rightStick.trigger
 
     //val steerAxis = steer.steering.scale { 0.5 * it } //.scale { if(it >= -0.195 && it <= 0.024) { 0.0 } else { it } }
     /*val steerAxis = throttle.rollAxis.scale { 0.35 * it }

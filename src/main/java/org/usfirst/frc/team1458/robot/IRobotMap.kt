@@ -6,5 +6,5 @@ import org.usfirst.frc.team1458.lib.sensor.NavX
 
 interface IRobotMap {
     val drivetrain : TankDrive
-   // val navX : NavX
+   //val navX : NavX
 }

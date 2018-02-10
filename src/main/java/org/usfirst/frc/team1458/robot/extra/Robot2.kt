@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1458.robot
+package org.usfirst.frc.team1458.robot.extra
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.usfirst.frc.team1458.lib.actuator.SmartMotor

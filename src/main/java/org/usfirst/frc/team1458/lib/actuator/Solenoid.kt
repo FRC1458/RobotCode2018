@@ -63,6 +63,7 @@ interface Solenoid {
                     solenoid.set(DoubleSolenoid.Value.kReverse)
                     _pos = Position.RETRACTED
                 }
+
             }
             sol.retract()
 
