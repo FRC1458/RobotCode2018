@@ -9,6 +9,9 @@ class Robot : BaseRobot() {
     }
 
     override fun teleopPeriodic() {
-        robot.drivetrain.cheesyDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickturnButton.triggered)
+        robot.drivetrain.cheesyDrive(
+                            oi.throttleAxis.value,
+                            oi.steerAxis.value,
+                            oi.quickturnButton.triggered)
     }
 }
