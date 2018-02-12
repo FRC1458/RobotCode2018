@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1458.robot
 
+import edu.wpi.first.wpilibj.AnalogInput
+import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.usfirst.frc.team1458.lib.core.BaseRobot
 import jaci.pathfinder.Pathfinder
@@ -11,12 +13,21 @@ import org.usfirst.frc.team1458.lib.pathfinding.SplineFollower
 import org.usfirst.frc.team1458.lib.util.SoundPlayer
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
+import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths
 
 
 class Robot : BaseRobot() {
 
     val oi = OI()
-    val robot = RobotMapPracticeChassis()
+    val robot = RobotMapFinalChassis()
+
+    val compressor = Compressor()
+
+    //val climberLimitSwitch = AnalogInput(3)
+
+    val speeds = ArrayList<Double>()
+
+    val controlthingy = Joystick(5)
 
     var drivingSpline = false
     //var driveToExchange : DriveToExchange = DriveToExchange()
@@ -28,7 +39,7 @@ class Robot : BaseRobot() {
 
 
     override fun setupAutoModes() {
-        SoundPlayer.play("robotenabled")
+        SoundPlayer.play("robotenabled.wav")
         addAutoMode(AutoMode.create {
             robot.drivetrain.tankDrive(0.0, 0.0)
             delay(500)
@@ -76,11 +87,17 @@ class Robot : BaseRobot() {
 
 
     override fun teleopInit() {
-        SoundPlayer.play("robotenabled")
+        SoundPlayer.play("robotenabled.wav")
+        SoundPlayer.play("dimelo.mp3")
+
+        SmartDashboard.putString("Gear", "Low")
+        robot.drivetrain.lowGear()
     }
 
 
     override fun teleopPeriodic() {
+
+        //SmartDashboard.putNumber("hallsensor", climberLimitSwitch.value.toDouble())
         //SmartDashboard.putNumber("leftJ", oi.leftAxis.value)
         //SmartDashboard.putNumber("rightJ", oi.rightAxis.value)
 
@@ -88,17 +105,17 @@ class Robot : BaseRobot() {
         SmartDashboard.putNumber("right", robot.drivetrain.rightMaster.connectedEncoder.angle)
 
         // Hacky stuff
-        if(robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble() > 2500.0) {
+        /*if(robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble() > 2500.0) {
             robot.drivetrain.leftMaster._talonInstance!!.setIntegralAccumulator(0.0, 0, 20)
         }
         if(robot.drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble() > 2500.0) {
             robot.drivetrain.rightMaster._talonInstance!!.setIntegralAccumulator(0.0, 0, 20)
-        }
+        }*/
 
-        SmartDashboard.putNumber("lefterror", robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
-        SmartDashboard.putNumber("righterror", robot.drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
-        SmartDashboard.putNumber("left rate", robot.drivetrain.leftMaster.connectedEncoder.rate * Math.PI * 1.11 / 360.0)
-        SmartDashboard.putNumber("right rate", robot.drivetrain.rightMaster.connectedEncoder.rate * Math.PI * 1.11 / 360.0)
+        //SmartDashboard.putNumber("lefterror", robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+        //SmartDashboard.putNumber("righterror", robot.drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+        SmartDashboard.putNumber("left rate", robot.drivetrain.leftMaster.connectedEncoder.rate / 6.0)
+        SmartDashboard.putNumber("right rate", robot.drivetrain.rightMaster.connectedEncoder.rate / 6.0)
 
        /* SmartDashboard.putNumber("Yaw Angle", robot.navX.yaw.angle)
         SmartDashboard.putNumber("Yaw Rate", robot.navX.yaw.rate)
@@ -125,8 +142,14 @@ class Robot : BaseRobot() {
         } else {
             robot.drivetrain.tankDrive(oi.xbox.leftY.value, oi.xbox.rightY.value)
         }*/
-        if(SmartDashboard.getString("Arcade", "a") == "a") {
+
+
+        //SmartDashboard.putString("Arcade", if() { "a" } else { "t" })
+
+
+        if(controlthingy.getRawButton(1) /*SmartDashboard.getString("Arcade", "a") == "a"*/) {
             robot.drivetrain.cheesyDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickturnButton.triggered)
+            speeds.add(oi.throttleAxis.value)
         } else {
             when {
                 oi.driveStraightButton.triggered -> robot.drivetrain.tankDrive(oi.rightAxis.value, oi.rightAxis.value)
@@ -135,18 +158,37 @@ class Robot : BaseRobot() {
             }
         }
 
+        if(oi.shiftUpButton.triggered) {
+            robot.drivetrain.highGear()
+            SmartDashboard.putString("Gear", "High")
+        } else if(oi.shiftDownButton.triggered) {
+            robot.drivetrain.lowGear()
+            SmartDashboard.putString("Gear", "Low")
+        }
+
+        /*if(speeds.size >= 50) {
+            val avg = Math.abs(speeds.average())
+            val speed = TurtleMaths.shift(avg, 0.0, 1.0, 40.0, 130.0).toInt()
+
+            //SoundPlayer.freq(speed)
+            speeds.clear()
+        }*/
+
         //
     }
 
 
     override fun runTest() {
-
+        compressor.start()
     }
 
     override fun robotDisabled() {
         //startTime = -1.0
         robot.drivetrain.tankDrive(0.0, 0.0)
-        SoundPlayer.play("robotdisabled")
+        SoundPlayer.stop()
+        SoundPlayer.play("robotdisabled.wav")
+
+        compressor.stop()
     }
 
 }

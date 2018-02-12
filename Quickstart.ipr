@@ -339,6 +339,24 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opencv/opencv-java/3.2.0/da5215ba2c023701a644802a1fcd93749061f90d/opencv-java-3.2.0-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: org.zeromq:jeromq:0.4.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.zeromq/jeromq/0.4.3/d734adc7e118cd26407e0b8e2c8a4cb15fb23620/jeromq-0.4.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.zeromq/jeromq/0.4.3/9f8d618723c2d8ebe7cc9275b9f7469864a8510a/jeromq-0.4.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: org.zeromq:jnacl:0.1.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.zeromq/jnacl/0.1.0/781d75fc80cb2ef4e89716f01fed101ca416e166/jnacl-0.1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.zeromq/jnacl/0.1.0/62737321b92ca306413fa336024706996f6c3ade/jnacl-0.1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="KotlinJavaRuntime">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/kotlin-runtime.jar!/" />

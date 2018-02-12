@@ -14,10 +14,12 @@ class OI {
     val rightStick : FlightStick = FlightStick.flightStick(1)
     //val xbox : Gamepad = Gamepad.xboxController(3)
 
-    var leftAxis = leftStick.pitchAxis.inverted
-    var rightAxis = rightStick.pitchAxis.inverted
+    var leftAxis = leftStick.pitchAxis.inverted.scale(1.0)
+    var rightAxis = rightStick.pitchAxis.inverted.scale(1.0)
     var driveStraightButton = rightStick.trigger
     var turnButton = leftStick.trigger
+    var shiftUpButton = rightStick.getButton(2)
+    var shiftDownButton = leftStick.getButton(2)
 
     var steerAxis = leftStick.rollAxis.scale(0.35)
     var throttleAxis = rightStick.pitchAxis.inverted

@@ -45,6 +45,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib" // Kotlin support
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.zeromq:jeromq:0.4.3"
 }
 
 jar {

@@ -124,17 +124,21 @@ class TankDrive(val leftMaster: SmartMotor,
 
     fun lowGear() {
         if(shifter != null) {
-            shifter?.retract()
-            highGear = false
-            refreshPIDConstants()
+            if(highGear) {
+                shifter?.retract()
+                highGear = false
+                refreshPIDConstants()
+            }
         }
     }
 
     fun highGear() {
         if(shifter != null) {
-            shifter?.extend()
-            highGear = true
-            refreshPIDConstants()
+            if(!highGear) {
+                shifter?.extend()
+                highGear = true
+                refreshPIDConstants()
+            }
         }
     }
 

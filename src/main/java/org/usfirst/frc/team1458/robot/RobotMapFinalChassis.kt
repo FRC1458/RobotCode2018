@@ -8,10 +8,10 @@ import org.usfirst.frc.team1458.lib.sensor.NavX
 
 class RobotMapFinalChassis: IRobotMap {
     override val drivetrain : TankDrive = TankDrive(
-            leftMaster = SmartMotor.CANtalonSRX(16).inverted,
-            rightMaster = SmartMotor.CANtalonSRX(22),
-            leftMotors = arrayOf(SmartMotor.CANtalonSRX(25).inverted),
-            rightMotors = arrayOf(SmartMotor.CANtalonSRX(23)),
+            leftMaster = SmartMotor.CANtalonSRX(16),
+            rightMaster = SmartMotor.CANtalonSRX(22).inverted,
+            leftMotors = arrayOf(SmartMotor.CANtalonSRX(25)),
+            rightMotors = arrayOf(SmartMotor.CANtalonSRX(23).inverted),
             closedLoopControl = false,
             wheelDiameter = 0.5,
             closedLoopScaling = 18.0, // TODO: determine
@@ -19,8 +19,9 @@ class RobotMapFinalChassis: IRobotMap {
             pidConstantsLowGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6530.5), // TODO: determine
             pidConstantsLowGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6877.7), // TODO: determine
 
-            shifter = Solenoid.doubleSolenoid(extendChannel = 0, retractChannel = 1)
+            shifter = Solenoid.doubleSolenoid(extendChannel = 1, retractChannel = 0)
                     + Solenoid.doubleSolenoid(extendChannel = 2, retractChannel = 3),
+
             pidConstantsHighGearLeft = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6530.5), // TODO: determine
             pidConstantsHighGearRight = PIDConstants(0.15, kI = 0.001, kD = 0.01, kF = 1.0/6877.7), // TODO: determine
             autoShift = false,
