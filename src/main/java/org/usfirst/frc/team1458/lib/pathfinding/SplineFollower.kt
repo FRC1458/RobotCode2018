@@ -18,8 +18,9 @@ class SplineFollower(val left: Trajectory,
                      val gyro: AngleSensor? = null,
                      val gyro_kP: Double? = null,
                      name: String,
-                     val stopFunc: () -> Boolean = { false } // Stops path if this returns true
-                     ) : BaseAutoMode() {
+                     val stopFunc: () -> Boolean = { false },
+                     val reversed: Boolean=false
+                    ) : BaseAutoMode() {
 
     constructor(leftCSV: String, rightCSV: String, drivetrain: TankDrive,
                 dt: Double? = null, gyro: AngleSensor? = null, gyro_kP: Double? = null,
@@ -54,6 +55,10 @@ class SplineFollower(val left: Trajectory,
 
                 leftVel -= turnAdjustment
                 rightVel += turnAdjustment
+            }
+            if(reversed){
+                leftVel = leftVel * -1.0
+                rightVel = rightVel * -1.0
             }
 
             drivetrain.setDriveVelocity(leftVel, rightVel)

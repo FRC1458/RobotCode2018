@@ -223,9 +223,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/2018turtleshellX.iml" filepath="$PROJECT_DIR$/2018turtleshellX.iml" />
-      <module fileurl="file://$PROJECT_DIR$/2018turtleshellX_main.iml" filepath="$PROJECT_DIR$/2018turtleshellX_main.iml" group="2018turtleshellX" />
-      <module fileurl="file://$PROJECT_DIR$/2018turtleshellX_test.iml" filepath="$PROJECT_DIR$/2018turtleshellX_test.iml" group="2018turtleshellX" />
+      <module fileurl="file://$PROJECT_DIR$/TurtleshellX.iml" filepath="$PROJECT_DIR$/TurtleshellX.iml" />
       <module fileurl="file://$PROJECT_DIR$/TurtleshellX_main.iml" filepath="$PROJECT_DIR$/TurtleshellX_main.iml" group="TurtleshellX" />
       <module fileurl="file://$PROJECT_DIR$/TurtleshellX_test.iml" filepath="$PROJECT_DIR$/TurtleshellX_test.iml" group="TurtleshellX" />
     </modules>
@@ -238,6 +236,7 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
   <component name="libraryTable">
     <library name="Gradle: edu.wpi.first.cscore:cscore-java:1.1.0">
