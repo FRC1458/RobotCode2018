@@ -135,7 +135,7 @@ object CheesyDriveHelper {
             leftPwm += overPower * (-1.0 - rightPwm)
             rightPwm = -1.0
         }
-        System.out.println("leftpwm = $leftPwm, rightpwm = $rightPwm")
+        //System.out.println("leftpwm = $leftPwm, rightpwm = $rightPwm")
         return Pair(leftPwm, rightPwm)
     }
 

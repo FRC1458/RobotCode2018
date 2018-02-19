@@ -6,6 +6,7 @@ import org.usfirst.frc.team1458.lib.drive.util.AutoshiftHelper
 import org.usfirst.frc.team1458.lib.drive.util.CheesyDriveHelper
 import org.usfirst.frc.team1458.lib.pid.PIDConstants
 import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
+import org.usfirst.frc.team1458.lib.sensor.interfaces.DistanceSensor
 
 
 /**
@@ -99,21 +100,53 @@ class TankDrive(val leftMaster: SmartMotor,
                 if(closedLoopControl) { closedLoopReady } else { closedLoopScaling != null } &&
                 autoshiftHelper != null
 
+    val leftEnc : DistanceSensor = object : DistanceSensor {
+        override val distanceMeters: Double
+            get() = leftMaster.connectedEncoder.angle * (wheelCircumference ?: 0.0) * 0.3048 / 360.0
+
+        override val velocity: Double
+            get() = leftMaster.connectedEncoder.rate * (wheelCircumference ?: 0.0) * 0.3048 / 360.0
+
+        override fun zero() {
+            leftMaster.connectedEncoder.zero()
+        }
+    }
+
+    val rightEnc : DistanceSensor = object : DistanceSensor {
+        override val distanceMeters: Double
+            get() = rightMaster.connectedEncoder.angle * (wheelCircumference ?: 0.0) * 0.3048 / 360.0
+
+        override val velocity: Double
+            get() = rightMaster.connectedEncoder.rate * (wheelCircumference ?: 0.0) * 0.3048 / 360.0
+
+        override fun zero() {
+            rightMaster.connectedEncoder.zero()
+        }
+    }
+
     init {
+        leftMaster.brakeMode = SmartMotor.BrakeMode.BRAKE
+        rightMaster.brakeMode = SmartMotor.BrakeMode.BRAKE
+
         // Set both motors to drive
         for(motor in leftMotors) {
             motor.follow(leftMaster)
+            motor.brakeMode = SmartMotor.BrakeMode.BRAKE
         }
 
         for(motor in rightMotors) {
             motor.follow(rightMaster)
+            motor.brakeMode = SmartMotor.BrakeMode.BRAKE
         }
+
 
         shifter?.retract()
         highGear = false
 
         refreshPIDConstants()
     }
+
+
 
     private fun refreshPIDConstants() {
         var constantsLeft: PIDConstants = (if(highGear) { pidConstantsHighGearLeft } else { pidConstantsLowGearLeft }) ?: PIDConstants.DISABLE

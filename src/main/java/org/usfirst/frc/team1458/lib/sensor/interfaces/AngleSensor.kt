@@ -42,33 +42,38 @@ interface AngleSensor : Zeroable {
     companion object {
         fun create(angle: () -> Double, rate: () -> Double): AngleSensor {
             return object : AngleSensor {
-                @Volatile private var zero = 0.0
+                var _zero = 0.0
+                    set(value) {
+                        field = value
+                    }
 
                 override val angle: Double
-                    get() = angle() - zero
+                    get() {
+                        return angle() - _zero
+                    }
 
                 override val rate: Double
                     get() = rate()
 
                 override fun zero() {
-                    zero = angle()
+                    _zero = angle()
                 }
             }
         }
 
         fun create(samplesToAverage: Int = 10, angle: () -> Double): AngleSensor {
             var sensor = object : AngleSensor {
-                @Volatile private var zero = 0.0
+                var _zero = 0.0
                 @Volatile var _rate = 0.0
 
                 override val angle: Double
-                    get() = angle() - zero
+                    get() = angle() - _zero
 
                 override val rate: Double
                     get() = _rate
 
                 override fun zero() {
-                    zero = angle()
+                    _zero = angle()
                 }
             }
 

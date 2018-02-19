@@ -59,5 +59,10 @@ interface Switch : DigitalInput {
         fun fromPOV(pov: POV, direction: POV.Direction) : Switch {
             return create { pov.direction == direction }
         }
+
+        fun fromDIO(port: Int) : Switch {
+            val dio = edu.wpi.first.wpilibj.DigitalInput(port)
+            return create { dio.get() }
+        }
     }
 }

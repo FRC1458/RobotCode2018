@@ -217,6 +217,7 @@
         <w>quickturn</w>
         <w>rbump</w>
         <w>rstick</w>
+        <w>stddev</w>
         <w>upshift</w>
       </words>
     </dictionary>

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1458.lib.pathfinding
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import jaci.pathfinder.Pathfinder
 import jaci.pathfinder.Trajectory
 import org.usfirst.frc.team1458.lib.core.BaseAutoMode
@@ -19,23 +20,24 @@ class SplineFollower(val left: Trajectory,
                      val gyro_kP: Double? = null,
                      name: String,
                      val stopFunc: () -> Boolean = { false },
-                     val reversed: Boolean=false
+                     val reversed: Boolean = false,
+                     val everyIterationFunc: () -> Unit = { }
                     ) : BaseAutoMode() {
 
     constructor(leftCSV: String, rightCSV: String, drivetrain: TankDrive,
                 dt: Double? = null, gyro: AngleSensor? = null, gyro_kP: Double? = null,
                 name: String = "Spline" +
                         leftCSV.split("/").last().replace("left", ""),
-                stopFunc: () -> Boolean = { false }) :
+                stopFunc: () -> Boolean = { false },
+                reversed: Boolean = false,
+                everyIterationFunc: () -> Unit = { }) :
             this(Pathfinder.readFromCSV(File(leftCSV)), Pathfinder.readFromCSV(File(rightCSV)),
-                    drivetrain, dt, gyro, gyro_kP, name, stopFunc)
+                    drivetrain, dt, gyro, gyro_kP, name, stopFunc, reversed, everyIterationFunc)
 
     val dt: Double = dt ?: (left[0].dt * 1000.0)
     override val name = name
 
     override fun auto() {
-
-
         val startTime = systemTimeMillis
         fun getIndex() = Math.floor((systemTimeMillis - startTime) / dt).toInt()
 
@@ -49,7 +51,7 @@ class SplineFollower(val left: Trajectory,
 
             if(gyro != null && gyro_kP != null) {
                 val angleError = Pathfinder.boundHalfDegrees(- Pathfinder.boundHalfDegrees(gyro.heading) - Pathfinder.boundHalfDegrees(Pathfinder.r2d(left[index].heading)))
-                println(angleError)
+                //println(angleError)
 
                 val turnAdjustment = gyro_kP * angleError
 
@@ -62,6 +64,7 @@ class SplineFollower(val left: Trajectory,
             }
 
             drivetrain.setDriveVelocity(leftVel, rightVel)
+            everyIterationFunc()
 
             //println("${right[index].heading}, ${left[index].heading}")
 
@@ -90,12 +93,28 @@ class SplineFollower(val left: Trajectory,
 
             AutoDataLogger.endTeleop()*/
 
+            // TODO remove to unbork
+
+            SmartDashboard.putNumber("Left Desired Position", left[index].position)
+            SmartDashboard.putNumber("Right Desired Position", right[index].position)
+
+            SmartDashboard.putNumber("Left Desired Velocity", left[index].velocity)
+            SmartDashboard.putNumber("Right Desired Velocity", right[index].velocity)
+
+            SmartDashboard.putNumber("Left Real Position", drivetrain.leftEnc.distanceFeet)
+            SmartDashboard.putNumber("Right Real Position", drivetrain.rightEnc.distanceFeet)
+
+            SmartDashboard.putNumber("Left Real Velocity", drivetrain.leftEnc.velocity * 39.3700787402 / 12.0)
+            SmartDashboard.putNumber("Right Real Velocity", drivetrain.rightEnc.velocity * 39.3700787402 / 12.0)
+
+            SmartDashboard.putNumber("RightError", drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+            SmartDashboard.putNumber("LeftError", drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
 
             delay(10)
             index = getIndex()
         }
         drivetrain.setRawDrive(0.0,0.0)
 
-        System.out.println(AutoDataLogger.getCSV(AutoDataLogger.keys.toTypedArray()))
+        //System.out.println(AutoDataLogger.getCSV(AutoDataLogger.keys.toTypedArray()))
     }
 }

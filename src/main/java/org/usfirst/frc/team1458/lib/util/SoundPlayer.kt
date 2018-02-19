@@ -18,8 +18,8 @@ object SoundPlayer {
             go {
                 val obj = URL(SoundHTTP)
                 with(obj.openConnection() as HttpURLConnection){
-                    println("\nSending 'GET' request to URL : $url")
-                    println("Response Code : $responseCode")
+                    //println("\nSending 'GET' request to URL : $url")
+                    //println("Response Code : $responseCode")
                 }
             }
         } catch (e: Throwable) {
@@ -33,8 +33,8 @@ object SoundPlayer {
             go {
                 val obj = URL(SoundHTTP)
                 with(obj.openConnection() as HttpURLConnection){
-                    println("\nSending 'GET' request to URL : $url")
-                    println("Response Code : $responseCode")
+                    //println("\nSending 'GET' request to URL : $url")
+                    //println("Response Code : $responseCode")
                 }
             }
         } catch (e: Throwable) {
@@ -47,8 +47,8 @@ object SoundPlayer {
             go {
                 val obj = URL(stopHTTP)
                 with(obj.openConnection() as HttpURLConnection){
-                    println("\nSending 'GET' request to URL : $url")
-                    println("Response Code : $responseCode")
+                    //println("\nSending 'GET' request to URL : $url")
+                    //println("Response Code : $responseCode")
                 }
             }
         } catch (e: Throwable) {

@@ -2,6 +2,7 @@ package org.usfirst.frc.team1458.lib.core
 
 import edu.wpi.first.wpilibj.SampleRobot
 import org.usfirst.frc.team1458.lib.util.DataLogger
+import org.usfirst.frc.team1458.lib.util.TelemetryLogger
 import org.usfirst.frc.team1458.lib.util.flow.WaitGroup
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.go
@@ -85,9 +86,9 @@ abstract class BaseRobot : SampleRobot, AutoModeHolder {
         teleopInit()
         while (super.isOperatorControl() && super.isEnabled()) {
             var lastStartMillis = systemTimeMillis
-            DataLogger.currentIterationTimestamp = lastStartMillis
+            TelemetryLogger.startIteration()
             teleopPeriodic()
-            DataLogger.endTeleop()
+            TelemetryLogger.endIteration()
             var lastEndMillis = systemTimeMillis
 
             var nextStartMillis : Double = lastStartMillis

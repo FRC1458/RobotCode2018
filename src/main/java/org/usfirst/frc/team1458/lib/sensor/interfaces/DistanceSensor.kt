@@ -7,10 +7,6 @@ import org.usfirst.frc.team1458.lib.util.maths.MovingAverage
 import edu.wpi.first.wpilibj.Ultrasonic
 import edu.wpi.first.wpilibj.AnalogInput
 
-
-
-
-
 interface DistanceSensor : Zeroable {
 
     val inverted : DistanceSensor
@@ -32,6 +28,9 @@ interface DistanceSensor : Zeroable {
      * Velocity in meters / second
      */
     val velocity : Double
+
+    val velocityFeetSec : Double
+        get() = velocity * 39.3700787402 / 12.0
 
     companion object {
         fun create(dist: () -> Double, vel: () -> Double) : DistanceSensor {
@@ -71,7 +70,7 @@ interface DistanceSensor : Zeroable {
             var movingAverage = MovingAverage(samplesToAverage)
             go { periodic (hz = 50) {
                 movingAverage.addNumber((sensor.distanceMeters - lastVal) / ((systemTimeMillis - lastTime) / 1000))
-                println("Sensor:"+(sensor.distanceMeters - lastVal))
+                //println("Sensor:"+(sensor.distanceMeters - lastVal))
                 sensor._velocity = movingAverage.average
                 lastVal = sensor.distanceMeters
                 lastTime = systemTimeMillis

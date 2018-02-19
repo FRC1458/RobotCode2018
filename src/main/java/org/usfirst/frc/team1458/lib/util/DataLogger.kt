@@ -118,8 +118,8 @@ object DataLogger {
         // Data
         for(timestamp in timestamps.sorted()) {
             str += "${timestamp.toLong()},"
-            for(key in keys) {
-                val d = data[key]!!
+            keys.forEach {
+                val d = data[it]!!
                 str += d[d.indexOfFirst { it.first == timestamp }].second.format(3) + ","
             }
             str = str.removeSuffix(",") + "\n"
