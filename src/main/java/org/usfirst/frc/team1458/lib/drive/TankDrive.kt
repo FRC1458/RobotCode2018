@@ -7,6 +7,9 @@ import org.usfirst.frc.team1458.lib.drive.util.CheesyDriveHelper
 import org.usfirst.frc.team1458.lib.pid.PIDConstants
 import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
 import org.usfirst.frc.team1458.lib.sensor.interfaces.DistanceSensor
+import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
+import org.usfirst.frc.team1458.lib.util.flow.systemTimeSeconds
+import kotlin.math.abs
 
 
 /**
@@ -45,7 +48,8 @@ class TankDrive(val leftMaster: SmartMotor,
                 val shiftDownSpeed: Double? = null,
                 val shiftCooldown: Double = 0.0,
 
-                var gyro: AngleSensor? = null) {
+                var gyro: AngleSensor? = null,
+                var accelLimit: Double = 1e100) {
 
     val wheelCircumference = wheelDiameter?.times(Math.PI)
 
@@ -79,6 +83,10 @@ class TankDrive(val leftMaster: SmartMotor,
         if(shiftUpSpeed != null && shiftDownSpeed != null) AutoshiftHelper(shiftUpSpeed, shiftDownSpeed, shiftCooldown)
         else null
     }()
+
+    var leftTarget = 0.0
+    var rightTarget = 0.0
+    var lastTime = 0.0
 
     /**
      * Returns true if closed loop mode is ready or false if open-loop should be used as a fallback
@@ -176,30 +184,53 @@ class TankDrive(val leftMaster: SmartMotor,
     }
 
     fun setDriveVelocity(left: Double, right: Double, forwardSpeed: Double? = null) {
-        //System.out.println("leftVel = $left, rightVel = $right")
         if(wheelCircumference != null) {
-            leftMaster.PIDsetpoint = left * (360.0 / wheelCircumference)
-            rightMaster.PIDsetpoint = right * (360.0 / wheelCircumference)
-
-            if(shiftDownSpeed != null && shiftUpSpeed != null && forwardSpeed != null && canAutoShift) {
-                autoshiftHelper?.autoshift(forwardSpeed, left, right, this::lowGear, this::highGear)
-            }
+            leftTarget = left * (360.0 / wheelCircumference)
+            rightTarget = right * (360.0 / wheelCircumference)
         } else {
-            leftMaster.PIDsetpoint = left
-            rightMaster.PIDsetpoint = right
+            leftTarget = left
+            rightTarget = right
+        }
 
-            if(shiftDownSpeed != null && shiftUpSpeed != null && forwardSpeed != null && canAutoShift) {
-                autoshiftHelper?.autoshift(forwardSpeed, left, right, this::lowGear, this::highGear)
-            }
+        // Accel limit
+        if(abs((leftTarget - leftMaster.PIDsetpoint) / (lastTime - systemTimeSeconds)) > accelLimit) {
+            leftMaster.PIDsetpoint = leftMaster.PIDsetpoint + accelLimit * (lastTime - systemTimeSeconds)
+        } else {
+            leftMaster.PIDsetpoint = leftTarget
+        }
+
+        if(abs((rightTarget - rightMaster.PIDsetpoint) / (lastTime - systemTimeSeconds)) > accelLimit) {
+            rightMaster.PIDsetpoint = rightMaster.PIDsetpoint + accelLimit * (lastTime - systemTimeSeconds)
+        } else {
+            rightMaster.PIDsetpoint = rightTarget
+        }
+        lastTime = systemTimeSeconds
+
+        if(shiftDownSpeed != null && shiftUpSpeed != null && forwardSpeed != null && canAutoShift) {
+            autoshiftHelper?.autoshift(forwardSpeed, leftMaster.PIDsetpoint, rightMaster.PIDsetpoint, this::lowGear, this::highGear)
         }
     }
 
     fun setRawDrive(left: Double, right: Double, forwardSpeed: Double? = null) {
-        leftMaster.speed = left
-        rightMaster.speed = right
+        leftTarget = left
+        rightTarget = right
+
+        // Accel limit
+        if(abs((leftTarget - leftMaster.speed) / (lastTime - systemTimeSeconds)) > accelLimit) {
+            leftMaster.speed = leftMaster.speed + accelLimit * (lastTime - systemTimeSeconds)
+        } else {
+            leftMaster.speed = leftTarget
+        }
+
+        if(abs((rightTarget - rightMaster.speed) / (lastTime - systemTimeSeconds)) > accelLimit) {
+            rightMaster.speed = rightMaster.speed + accelLimit * (lastTime - systemTimeSeconds)
+        } else {
+            rightMaster.speed = rightTarget
+        }
+        lastTime = systemTimeSeconds
 
         if(forwardSpeed != null && canAutoShift && closedLoopScaling != null) {
-            autoshiftHelper?.autoshift(forwardSpeed, left * closedLoopScaling, right * closedLoopScaling, this::lowGear, this::highGear)
+            autoshiftHelper?.autoshift(forwardSpeed, leftMaster.speed * closedLoopScaling, rightMaster.speed * closedLoopScaling, this::lowGear, this::highGear)
         }
     }
 
@@ -240,6 +271,4 @@ class TankDrive(val leftMaster: SmartMotor,
         }
     }
 
-    // TODO: integrate motion profiling / pure pursuit
 }
-// TODO: ADD STRAIGHT DRIVE PID

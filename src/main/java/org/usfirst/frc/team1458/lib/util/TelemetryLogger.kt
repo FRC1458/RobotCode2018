@@ -10,6 +10,7 @@ import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths
 import org.usfirst.frc.team1458.lib.util.maths.format
 import java.io.BufferedWriter
+import java.io.File
 import java.io.FileWriter
 import java.util.*
 
@@ -20,20 +21,24 @@ object TelemetryLogger {
     var logKeys: Array<out String>? = null
     var currentIterationData: HashMap<String, String> = HashMap()
 
-    var file : String = "/tmp/log.csv"
     private var fileWriter : BufferedWriter? = null
-
-
     var iteration = 0
 
-    fun setup(filename: String, vararg keys: String) {
+    fun newFilename() : String {
+        val logNumber = File("/home/lvuser/logNumber.txt").readText().trim().toInt() + 1
+        File("/home/lvuser/logNumber.txt").writeText(logNumber.toString())
+
+        return "/home/lvuser/logs/Log$logNumber.csv"
+    }
+
+
+    fun setup(keys: Array<String>) {
+        val filename = newFilename()
         val _keys = arrayOf("timestamp").plus(keys)
         header = _keys.reduce({ acc, key -> acc + "," + key}).removeSuffix(",") + "\n"
         logKeys = _keys
 
-        file = filename
-        fileWriter = BufferedWriter(FileWriter(file, false))
-        println("filewriter = "+fileWriter + " file = "+file)
+        fileWriter = BufferedWriter(FileWriter(filename, false))
         fileWriter?.write(header)
         fileWriter?.flush()
     }
@@ -58,7 +63,7 @@ object TelemetryLogger {
                 reduce({ acc, value -> acc + "," + value }) + "\n"
         data += line
 
-        System.out.println(line)
+        //System.out.println(line)
         fileWriter?.write(line)
         fileWriter?.flush()
 

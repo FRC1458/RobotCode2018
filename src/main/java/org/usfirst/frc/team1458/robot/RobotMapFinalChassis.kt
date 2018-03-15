@@ -32,7 +32,9 @@ class RobotMapFinalChassis(val oi: OI) {
             autoShift = false,
             shiftUpSpeed = 10.0, // TODO: determine
             shiftDownSpeed = 12.0, // TODO: determine
-            shiftCooldown = 3.0
+            shiftCooldown = 3.0,
+
+            accelLimit = 1000000.0 // feet/sec^2
     )
 
     val intake = QuantumIntake(oi.controlBoard.intakePull, oi.controlBoard.intakePush,

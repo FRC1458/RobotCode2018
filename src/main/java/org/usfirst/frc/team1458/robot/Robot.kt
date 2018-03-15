@@ -8,11 +8,13 @@ import org.usfirst.frc.team1458.lib.actuator.SmartMotor
 import org.usfirst.frc.team1458.lib.core.AutoMode
 import org.usfirst.frc.team1458.lib.input.interfaces.Switch
 import org.usfirst.frc.team1458.lib.pathfinding.SplineFollower
-import org.usfirst.frc.team1458.lib.util.SoundPlayer
 import org.usfirst.frc.team1458.lib.util.TelemetryLogger
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths
+import edu.wpi.cscore.MjpegServer
+import edu.wpi.cscore.UsbCamera
+import edu.wpi.cscore.VideoMode
+import edu.wpi.first.wpilibj.DriverStation
 
 
 class Robot : BaseRobot() {
@@ -20,88 +22,131 @@ class Robot : BaseRobot() {
     val oi = OI()
     val robot = RobotMapFinalChassis(oi)
 
+    var drivetrainInverted = false
+    var lastTriggered = false
+
     val compressor = Compressor()
 
-    var directionFwd = true
-    var first = true
-
-    var testincrementer = 0
-    val sensorTESTTHINGY = AnalogInput(3) // TODO: remove this - it definitely will break things
-
+    // Elevator stuff
     val mag1 = Switch.fromDIO(8).inverted
     val mag2 = Switch.fromDIO(9).inverted
-
     val elev1 = SmartMotor.CANtalonSRX(20).inverted
     val elev2 = SmartMotor.CANtalonSRX(21).inverted
 
+    val frontCamera = UsbCamera("FrontCamera", 1)
+    val rearCamera = UsbCamera("RearCamera", 0)
+    val cameraServer = MjpegServer("CameraStream", 5801)
+
     override fun robotSetup() {
-        SmartDashboard.putString("Arcade", "a")
+        frontCamera.videoMode = VideoMode(VideoMode.PixelFormat.kMJPEG, 480, 320, 30)
+        frontCamera.brightness = 1
+        rearCamera.videoMode = VideoMode(VideoMode.PixelFormat.kMJPEG, 480, 320, 30)
+        rearCamera.brightness = 1
 
-        //TelemetryLogger.setup("log1.csv", "gyro")
-
-
-        SmartDashboard.putNumber("MotorSpeed", 0.0)
-
-        TelemetryLogger.setup("/home/lvuser/goodlog.csv", "Throttle", "Steer", "QuickTurn", "CurrentDrawLeft", "CurrentDrawRight", "Incrementer", "Mag1", "Mag2")
+        cameraServer.source = frontCamera
     }
 
-
-
     override fun setupAutoModes() {
-        /*addAutoMode(AutoMode.create {
-            if(first) {
-                first = false
-                println("motor_speed,right_velocity,right_stddev,left_velocity,left_stddev,direction")
-            }
-
-            val speed = SmartDashboard.getNumber("MotorSpeed", 0.0)
-
-            if(directionFwd) {
-                robot.drivetrain.tankDrive(speed, speed)
-            } else {
-                robot.drivetrain.tankDrive(-speed, -speed)
-            }
-            directionFwd = !directionFwd
-
-            delay(500)
-            val start = systemTimeMillis
-            val rightArr = ArrayList<Double>()
-            val leftArr = ArrayList<Double>()
-            while(systemTimeMillis <= start + 500) {
-                rightArr.add(robot.drivetrain.rightMaster._talonInstance!!.getSelectedSensorVelocity(0).toDouble())
-                leftArr.add(robot.drivetrain.leftMaster._talonInstance!!.getSelectedSensorVelocity(0).toDouble())
-
-                delay(1)
-            }
-            robot.drivetrain.tankDrive(0.0, 0.0)
-
-            println("$speed,${rightArr.average()},${TurtleMaths.calculateSD(rightArr)}," +
-                    "${leftArr.average()},${TurtleMaths.calculateSD(leftArr)}," +
-                    "${(if(directionFwd) {"FORWARD"} else {"REVERSE"})}")
-        })*/
-
-        /*leftCSV = if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
-            "/home/admin/pathleft_left_detailed.csv"
-        } else {
-            "/home/admin/pathright_left_detailed.csv"
-        },
-        rightCSV = if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
-            "/home/admin/pathleft_right_detailed.csv"
-        } else {
-            "/home/admin/pathright_right_detailed.csv"
-        },*/
-
         addAutoMode(AutoMode.create {
+            robot.drivetrain.tankDrive(0.7, 0.7)
+            delay(200)
+            robot.drivetrain.tankDrive(-0.7, -0.7)
+            delay(200)
             robot.drivetrain.tankDrive(0.0, 0.0)
-            delay(500)
+            delay(50)
             SplineFollower (
-                    leftCSV = "/home/admin/straight6feet_left_detailed.csv",
-                    rightCSV = "/home/admin/straight6feet_right_detailed.csv",
+                    leftCSV = "/home/admin/auton1_left_detailed.csv",
+                    rightCSV = "/home/admin/auton1_right_detailed.csv",
                     drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
                     name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                     everyIterationFunc = { robot.intake.update(true, false) }
             ).auto()
             robot.intake.update(false, false)
+
+            elev1.speed = 0.8
+            elev2.speed = 0.8
+            delay(350)
+            elev1.speed = 0.0
+            elev2.speed = 0.0
+
+
+            SplineFollower (
+                    leftCSV = "/home/admin/auton2_left_detailed.csv",
+                    rightCSV = "/home/admin/auton2_right_detailed.csv",
+                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                    name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                    reversed = true
+            ).auto()
+
+
+            val startTime = systemTimeMillis
+            elev1.speed = 0.6
+            elev2.speed = 0.6
+
+            if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
+                SplineFollower (
+                        leftCSV = "/home/admin/auton4_left_detailed.csv",
+                        rightCSV = "/home/admin/auton4_right_detailed.csv",
+                        drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                        name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                        everyIterationFunc = {
+                            if(systemTimeMillis - startTime < 1900) {
+                                elev1.speed = 0.6
+                                elev2.speed = 0.6
+                            } else {
+                                elev1.speed = 0.0
+                                elev2.speed = 0.0
+                            }
+                        }
+                ).auto()
+            } else {
+                SplineFollower (
+                        leftCSV = "/home/admin/auton2_left_detailed.csv",
+                        rightCSV = "/home/admin/auton2_right_detailed.csv",
+                        drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                        name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                        everyIterationFunc = {
+                            if(systemTimeMillis - startTime < 1900) {
+                                elev1.speed = 0.6
+                                elev2.speed = 0.6
+                            } else {
+                                elev1.speed = 0.0
+                                elev2.speed = 0.0
+                            }
+                        }
+                ).auto()
+            }
+
+            val startTime2 = systemTimeMillis
+            while(systemTimeMillis - startTime2 < 800) {
+                robot.intake.update(false, true)
+            }
+            robot.intake.update(false, false)
+
+            SplineFollower (
+                    leftCSV = "/home/admin/auton2_left_detailed.csv",
+                    rightCSV = "/home/admin/auton2_right_detailed.csv",
+                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                    name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                    reversed = true
+            ).auto()
+        })
+
+        // Drive Forward Only
+        addAutoMode(AutoMode.create {
+            // Shake robot to drop intake
+            robot.drivetrain.tankDrive(0.7, 0.7)
+            delay(200)
+            robot.drivetrain.tankDrive(-0.7, -0.7)
+            delay(200)
+            robot.drivetrain.tankDrive(0.0, 0.0)
+            delay(750)
+
+            robot.drivetrain.tankDrive(0.4, 0.4)
+            delay(2000)
+            robot.drivetrain.tankDrive(0.0, 0.0)
+            delay(50)
+
         })
     }
 
@@ -112,12 +157,7 @@ class Robot : BaseRobot() {
 
 
     override fun teleopInit() {
-        SoundPlayer.play("robotenabled.wav")
-        SoundPlayer.play("dimelo.mp3")
-
-        SmartDashboard.putString("Gear", "Low")
         robot.drivetrain.lowGear()
-
         robot.drivetrain.leftMaster.connectedEncoder.zero()
         robot.drivetrain.rightMaster.connectedEncoder.zero()
     }
@@ -125,96 +165,95 @@ class Robot : BaseRobot() {
 
     override fun teleopPeriodic() {
 
-        robot.climber.update()
+        // Press button to invert drivetrain
+        if(oi.invertButton.triggered && !lastTriggered) {
+            drivetrainInverted = !drivetrainInverted
 
-        SmartDashboard.putNumber("TESTHALLEFFECT", sensorTESTTHINGY.value.toDouble())
-
-        SmartDashboard.putBoolean("CUBE IN INTAKE", robot.intake.cubeInIntake)
-
-        SmartDashboard.putNumber("Angle", robot.navX.yaw.angle)
-
-        robot.drivetrain.cheesyDrive(oi.throttleAxis.value, oi.steerAxis.value, oi.quickturnButton.triggered)
-
-        SmartDashboard.putNumber("Throttle", oi.throttleAxis.value)
-        SmartDashboard.putNumber("Steer", oi.steerAxis.value)
-        SmartDashboard.putBoolean("QuickTurn", oi.quickturnButton.triggered)
-        SmartDashboard.putNumber("LeftOutput", robot.drivetrain.leftMaster.PIDsetpoint)
-        SmartDashboard.putNumber("RightOutput", robot.drivetrain.rightMaster.PIDsetpoint)
-        SmartDashboard.putNumber("LeftError", robot.drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
-        SmartDashboard.putNumber("RightError", robot.drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
-
-
-        SmartDashboard.putNumber("LeftCurrent", robot.drivetrain.leftMaster._talonInstance!!.outputCurrent)
-        SmartDashboard.putNumber("RightCurrent", robot.drivetrain.rightMaster._talonInstance!!.outputCurrent)
-
-        TelemetryLogger.putValue("Throttle", oi.throttleAxis.value)
-        TelemetryLogger.putValue("Steer", oi.steerAxis.value)
-        TelemetryLogger.putValue("QuickTurn", oi.quickturnButton.triggered)
-
-        TelemetryLogger.putValue("Incrementer", ++testincrementer)
-        SmartDashboard.putNumber("Incrementer", testincrementer.toDouble())
-
-        TelemetryLogger.putValue("Mag1", mag1.triggered)
-        SmartDashboard.putBoolean("Mag1", mag1.triggered)
-
-        TelemetryLogger.putValue("Mag2", mag2.triggered)
-        SmartDashboard.putBoolean("Mag2", mag2.triggered)
-
-        TelemetryLogger.putValue("CurrentDrawLeft", robot.drivetrain.leftMaster._talonInstance!!.outputCurrent)
-        TelemetryLogger.putValue("CurrentDrawRight", robot.drivetrain.rightMaster._talonInstance!!.outputCurrent)
-
-
-        /*when {
-            oi.driveStraightButton.triggered -> robot.drivetrain.tankDrive(oi.rightAxis.value, oi.rightAxis.value)
-            oi.turnButton.triggered -> robot.drivetrain.tankDrive(oi.leftAxis.value, -oi.leftAxis.value)
-            else -> robot.drivetrain.tankDrive(oi.leftAxis.value, oi.rightAxis.value)
-        }*/
-
-       /* if(oi.leftStick.getButton(3).triggered) {
-            intakeWheel1.speed = 0.9
-            intakeWheel2.speed = 0.9
-        } else if(oi.rightStick.getButton(3).triggered) {
-            intakeWheel1.speed = -0.9
-            intakeWheel2.speed = -0.9
-        } else {
-            intakeWheel1.speed = 0.0
-            intakeWheel2.speed = 0.0
-        }*/
-
-        robot.intake.update()
-
-        if(oi.leftStick.getButton(4).triggered) {
-
-            robot.drivetrain.leftMaster.connectedEncoder.zero()
-            robot.drivetrain.rightMaster.connectedEncoder.zero()
+            // Switch camera if drivetrain inverted
+            if(drivetrainInverted) {
+                cameraServer.source = rearCamera
+            } else {
+                cameraServer.source = frontCamera
+            }
         }
+        lastTriggered = oi.invertButton.triggered
 
+        // Manual Shift
         if(oi.shiftUpButton.triggered) {
             robot.drivetrain.highGear()
-            SmartDashboard.putString("Gear", "High")
         } else if(oi.shiftDownButton.triggered) {
             robot.drivetrain.lowGear()
-            SmartDashboard.putString("Gear", "Low")
         }
 
-        val speed = if(oi.controlBoard.elevator1.triggered && !mag1.triggered) { 0.4 } else if(oi.controlBoard.elevator3.triggered && !mag2.triggered) { -0.4 } else { 0.0 }
+        // Drivetrain
+        robot.drivetrain.arcadeDrive(
+                if (drivetrainInverted) { -0.5 * (oi.throttleAxis.value) } else { oi.throttleAxis.value },
+                if (drivetrainInverted) { (oi.steerAxis.value) } else { oi.steerAxis.value }
+        )
 
-        SmartDashboard.putNumber("ELEVATOR REEE", speed)
+        System.out.println("invert = $drivetrainInverted, throttle = ${oi.throttleAxis.value}, steer = ${oi.steerAxis.value}")
 
+        // Subsystems
+        robot.climber.update()
+        robot.intake.update()
+
+        // Elevator control
+        val speed = if(oi.controlBoard.elevator1.triggered && !mag1.triggered) { 0.8 }
+                    else if(oi.controlBoard.elevator3.triggered && !mag2.triggered) { -0.8 }
+                    else { 0.0 }
         elev1.speed = speed
         elev2.speed = speed
+
+
+        // Logging
+
+        // TODO MOVE THIS TO ROBOTSETUP
+        /*TelemetryLogger.setup(
+                    // General power measurements
+                    arrayOf("pdp_voltage", "pdp_temperature", "pdp_total_current",
+                            "pdp_total_power", "pdp_total_energy") +
+
+                    // PDP per-channel measurements
+                    Array(16, { i -> "pdp_current_$i" }) +
+
+                    // General info (DS, FMS, Field)
+                    arrayOf("ds_connected", "fms_connected", "is_active", "mode") +
+                    arrayOf())
+        */
+        // TODO MORE ABOVE ^^^^^^^^^^^^^^
+
+
+        //DriverStation.getInstance()
+
+        // Controls
+        //TelemetryLogger.putValue("Throttle", oi.throttleAxis.value)
+        //TelemetryLogger.putValue("Steer", oi.steerAxis.value)
+        //TelemetryLogger.putValue("QuickTurn", oi.quickturnButton.triggered)
+
+        // Sensors
+        //TelemetryLogger.putValue("Mag1", mag1.triggered)
+        //TelemetryLogger.putValue("Mag2", mag2.triggered)
+
+        // Motors
+
+        // Power
+
     }
 
 
     override fun runTest() {
         compressor.start()
+        while(isEnabled && isTest) {
+            if(oi.controlBoard.winch.triggered) {
+                robot.climber.winchMotor.speed = -0.25
+            } else {
+                robot.climber.winchMotor.speed = 0.0
+            }
+        }
     }
 
     override fun robotDisabled() {
         robot.drivetrain.tankDrive(0.0, 0.0)
-        SoundPlayer.stop()
-        SoundPlayer.play("robotdisabled.wav")
-
         compressor.stop()
     }
 

@@ -15,6 +15,9 @@ val systemTimeMillis : Double
         return time
     }
 
+val systemTimeSeconds : Double
+    get() = systemTimeMillis / 1000.0
+
 /**
  * Delays execution for the specified number of milliseconds. Should be used very sparingly.
  */
