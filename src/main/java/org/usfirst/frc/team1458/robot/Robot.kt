@@ -123,8 +123,8 @@ class Robot : BaseRobot() {
 
             if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
                 SplineFollower (
-                        leftCSV = "/home/admin/left_spline_left_detailed.csv",
-                        rightCSV = "/home/admin/left_spline_right_detailed.csv",
+                        leftCSV = "/home/admin/finalleft_left_detailed.csv",
+                        rightCSV = "/home/admin/finalleft_right_detailed.csv",
                         drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
                         name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                         everyIterationFunc = {
@@ -139,8 +139,8 @@ class Robot : BaseRobot() {
                 ).auto()
             } else {
                 SplineFollower (
-                        leftCSV = "/home/admin/right_spline_left_detailed.csv",
-                        rightCSV = "/home/admin/right_spline_right_detailed.csv",
+                        leftCSV = "/home/admin/finalright_left_detailed.csv",
+                        rightCSV = "/home/admin/finalright_right_detailed.csv",
                         drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
                         name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                         everyIterationFunc = {
