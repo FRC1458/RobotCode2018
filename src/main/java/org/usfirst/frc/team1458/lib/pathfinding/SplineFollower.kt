@@ -1,12 +1,10 @@
 package org.usfirst.frc.team1458.lib.pathfinding
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import jaci.pathfinder.Pathfinder
 import jaci.pathfinder.Trajectory
 import org.usfirst.frc.team1458.lib.core.BaseAutoMode
 import org.usfirst.frc.team1458.lib.drive.TankDrive
 import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
-import org.usfirst.frc.team1458.lib.util.AutoDataLogger
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 import java.io.File
@@ -95,20 +93,16 @@ class SplineFollower(val left: Trajectory,
 
             // TODO remove to unbork
 
-            SmartDashboard.putNumber("Left Desired Position", left[index].position)
-            SmartDashboard.putNumber("Right Desired Position", right[index].position)
 
-            SmartDashboard.putNumber("Left Desired Velocity", left[index].velocity)
-            SmartDashboard.putNumber("Right Desired Velocity", right[index].velocity)
+            System.out.print(" Left Desired Velocity="+ left[index].velocity)
+            System.out.print(" Right Desired Velocity="+ right[index].velocity)
 
-            SmartDashboard.putNumber("Left Real Position", drivetrain.leftEnc.distanceFeet)
-            SmartDashboard.putNumber("Right Real Position", drivetrain.rightEnc.distanceFeet)
+            System.out.print(" Left Real Velocity="+ drivetrain.leftEnc.velocity * 39.3700787402 / 12.0)
+            System.out.print(" Right Real Velocity="+ drivetrain.rightEnc.velocity * 39.3700787402 / 12.0)
 
-            SmartDashboard.putNumber("Left Real Velocity", drivetrain.leftEnc.velocity * 39.3700787402 / 12.0)
-            SmartDashboard.putNumber("Right Real Velocity", drivetrain.rightEnc.velocity * 39.3700787402 / 12.0)
-
-            SmartDashboard.putNumber("RightError", drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
-            SmartDashboard.putNumber("LeftError", drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+            System.out.print(" RightError="+ drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+            System.out.print(" LeftError="+ drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+            System.out.println("")
 
             delay(10)
             index = getIndex()

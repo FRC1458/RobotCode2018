@@ -45,4 +45,8 @@ class Robot2 : BaseRobot() {
 
     }
 
+    override fun disabledPeriodic() {
+
+    }
+
 }

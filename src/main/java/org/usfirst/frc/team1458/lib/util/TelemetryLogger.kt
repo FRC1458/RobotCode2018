@@ -1,13 +1,6 @@
 package org.usfirst.frc.team1458.lib.util
 
-import com.sun.xml.internal.fastinfoset.util.StringArray
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
-import org.usfirst.frc.team1458.lib.util.flow.go
-import org.usfirst.frc.team1458.lib.util.flow.periodic
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
-import org.usfirst.frc.team1458.lib.util.maths.TurtleMaths
 import org.usfirst.frc.team1458.lib.util.maths.format
 import java.io.BufferedWriter
 import java.io.File
@@ -25,22 +18,32 @@ object TelemetryLogger {
     var iteration = 0
 
     fun newFilename() : String {
-        val logNumber = File("/home/lvuser/logNumber.txt").readText().trim().toInt() + 1
-        File("/home/lvuser/logNumber.txt").writeText(logNumber.toString())
+        try {
+            val logNumber = File("/media/sda1/logNumber.txt").readText().trim().toInt() + 1
+            File("/media/sda1/logNumber.txt").writeText(logNumber.toString())
 
-        return "/home/lvuser/logs/Log$logNumber.csv"
+            return "/media/sda1/logs/Log$logNumber.csv"
+        } catch (e: Exception) {
+            return "/media/sda1/logs/LogERROR.csv"
+        }
+
+
     }
 
 
     fun setup(keys: Array<String>) {
-        val filename = newFilename()
-        val _keys = arrayOf("timestamp").plus(keys)
-        header = _keys.reduce({ acc, key -> acc + "," + key}).removeSuffix(",") + "\n"
-        logKeys = _keys
+        try {
+            val filename = newFilename()
+            val _keys = arrayOf("timestamp").plus(keys)
+            header = _keys.reduce({ acc, key -> acc + "," + key}).removeSuffix(",") + "\n"
+            logKeys = _keys
 
-        fileWriter = BufferedWriter(FileWriter(filename, false))
-        fileWriter?.write(header)
-        fileWriter?.flush()
+            fileWriter = BufferedWriter(FileWriter(filename, false))
+            fileWriter?.write(header)
+            fileWriter?.flush()
+        } catch (e: Exception) {
+
+        }
     }
 
     fun startIteration() {
@@ -59,14 +62,19 @@ object TelemetryLogger {
     fun putValue(key: String, value: Boolean) = putValue(key, value.toString())
 
     fun endIteration() {
-        var line = logKeys?.map { key -> currentIterationData[key] }?.
-                reduce({ acc, value -> acc + "," + value }) + "\n"
-        data += line
+        try {
+            if(iteration % 5 == 0) {
+                var line = logKeys?.map { key -> currentIterationData[key] }?.
+                        reduce({ acc, value -> acc + "," + value }) + "\n"
+                // data += line
 
-        //System.out.println(line)
-        fileWriter?.write(line)
-        fileWriter?.flush()
-
+                //System.out.println(line)
+                fileWriter?.write(line)
+                fileWriter?.flush()
+            }
+        } catch (e: Exception) {
+            // do nothing
+        }
 
         iteration++
     }

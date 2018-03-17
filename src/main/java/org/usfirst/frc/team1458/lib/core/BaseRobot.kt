@@ -59,6 +59,10 @@ abstract class BaseRobot : SampleRobot, AutoModeHolder {
      */
     abstract fun robotDisabled()
 
+    abstract fun disabledPeriodic()
+
+    open fun selectAutoMode() { }
+
     fun addAutoMode(autoMode: AutoMode) {
         autoModes.add(autoMode)
     }
@@ -75,9 +79,13 @@ abstract class BaseRobot : SampleRobot, AutoModeHolder {
 
     override fun disabled() {
         robotDisabled()
+        while(isDisabled) {
+            disabledPeriodic()
+        }
     }
 
     override fun autonomous() {
+        selectAutoMode()
         val autoMode = autoModes[selectedAutoModeIndex]
         autoMode?.auto()
     }
