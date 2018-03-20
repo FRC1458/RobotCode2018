@@ -9,16 +9,17 @@ import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
 import org.usfirst.frc.team1458.lib.sensor.interfaces.DistanceSensor
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeSeconds
+import java.lang.Math.abs
 import kotlin.math.abs
 
 
 /**
  * Tank drive class
  *
- * @param leftMaster Master motor for left side
- * @param rightMaster Master motor for right side
- * @param leftMotors Other drive motors for left side
- * @param rightMotors Other drive motors for right side
+ * @param leftMaster Master motor for leftTrajectory side
+ * @param rightMaster Master motor for rightTrajectory side
+ * @param leftMotors Other drive motors for leftTrajectory side
+ * @param rightMotors Other drive motors for rightTrajectory side
  *
  * @param closedLoopControl Whether to enable closed-loop control for the drivetrain
  * @param shifter Shifter for high/low gear (extended is high gear, retracted is low)
@@ -181,6 +182,11 @@ class TankDrive(val leftMaster: SmartMotor,
                 refreshPIDConstants()
             }
         }
+    }
+
+    fun setOpenLoopDrive(left: Double, right: Double) {
+        leftMaster.speed = left
+        rightMaster.speed = right
     }
 
     fun setDriveVelocity(left: Double, right: Double, forwardSpeed: Double? = null) {

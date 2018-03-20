@@ -10,7 +10,7 @@ import java.text.DecimalFormat
 /**
  * Translation in a 2D coordinate system - just an (x, y) pair.
  *
- * Relative to the robot, X is forward/back and y is left/right.
+ * Relative to the robot, X is forward/back and y is leftTrajectory/rightTrajectory.
  */
 class Translation2D(val x: Double, val y : Double) : Interpolable<Translation2D>, Extrapolable<Translation2D> {
 

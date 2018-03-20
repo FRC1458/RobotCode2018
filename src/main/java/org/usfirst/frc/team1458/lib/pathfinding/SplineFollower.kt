@@ -25,7 +25,7 @@ class SplineFollower(val left: Trajectory,
     constructor(leftCSV: String, rightCSV: String, drivetrain: TankDrive,
                 dt: Double? = null, gyro: AngleSensor? = null, gyro_kP: Double? = null,
                 name: String = "Spline" +
-                        leftCSV.split("/").last().replace("left", ""),
+                        leftCSV.split("/").last().replace("leftTrajectory", ""),
                 stopFunc: () -> Boolean = { false },
                 reversed: Boolean = false,
                 everyIterationFunc: () -> Unit = { }) :
@@ -64,23 +64,23 @@ class SplineFollower(val left: Trajectory,
             drivetrain.setDriveVelocity(leftVel, rightVel)
             everyIterationFunc()
 
-            //println("${right[index].heading}, ${left[index].heading}")
+            //println("${rightTrajectory[index].heading}, ${leftTrajectory[index].heading}")
 
-            //println("${left[index].velocity},${leftVel},${right[index].velocity},${rightVel},${right[index].heading},${gyro?.angle ?: 0.0},${drivetrain.leftMaster.connectedEncoder.rate * 1.11 / 360.0},${drivetrain.rightMaster.connectedEncoder.rate * 1.11 / 360.0},${drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0)}")
+            //println("${leftTrajectory[index].velocity},${leftVel},${rightTrajectory[index].velocity},${rightVel},${rightTrajectory[index].heading},${gyro?.angle ?: 0.0},${drivetrain.leftMaster.connectedEncoder.rate * 1.11 / 360.0},${drivetrain.rightMaster.connectedEncoder.rate * 1.11 / 360.0},${drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0)}")
 
-            /*AutoDataLogger.putValue("Left Position", left[index].position)
-            AutoDataLogger.putValue("Right Position", right[index].position)
+            /*AutoDataLogger.putValue("Left Position", leftTrajectory[index].position)
+            AutoDataLogger.putValue("Right Position", rightTrajectory[index].position)
 
-            AutoDataLogger.putValue("Left Velocity", left[index].velocity)
-            AutoDataLogger.putValue("Right Velocity", right[index].velocity)
+            AutoDataLogger.putValue("Left Velocity", leftTrajectory[index].velocity)
+            AutoDataLogger.putValue("Right Velocity", rightTrajectory[index].velocity)
 
-            AutoDataLogger.putValue("Left Accel", left[index].acceleration)
-            AutoDataLogger.putValue("Right Accel", right[index].acceleration)
+            AutoDataLogger.putValue("Left Accel", leftTrajectory[index].acceleration)
+            AutoDataLogger.putValue("Right Accel", rightTrajectory[index].acceleration)
 
-            AutoDataLogger.putValue("Left Jerk", left[index].jerk)
-            AutoDataLogger.putValue("Right Jerk", right[index].jerk)
+            AutoDataLogger.putValue("Left Jerk", leftTrajectory[index].jerk)
+            AutoDataLogger.putValue("Right Jerk", rightTrajectory[index].jerk)
 
-            AutoDataLogger.putValue("Heading", right[index].heading)
+            AutoDataLogger.putValue("Heading", rightTrajectory[index].heading)
 
             AutoDataLogger.putValue("Real Heading", gyro?.angle ?: 0.0)
             AutoDataLogger.putValue("Real Left Velocity", drivetrain.leftMaster.connectedEncoder.rate * 1.11 / 360.0)

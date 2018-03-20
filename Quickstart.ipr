@@ -14,6 +14,8 @@
     <bytecodeTargetLevel target="1.8">
       <module name="2018turtleshellX_main" target="1.8" />
       <module name="2018turtleshellX_test" target="1.8" />
+      <module name="RobotCode2018_main" target="1.8" />
+      <module name="RobotCode2018_test" target="1.8" />
       <module name="Robotics-2018turtleshellX_main" target="1.8" />
       <module name="Robotics-2018turtleshellX_test" target="1.8" />
       <module name="TurtleshellX_main" target="1.8" />
@@ -224,9 +226,9 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TurtleshellX.iml" filepath="$PROJECT_DIR$/TurtleshellX.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TurtleshellX_main.iml" filepath="$PROJECT_DIR$/TurtleshellX_main.iml" group="TurtleshellX" />
-      <module fileurl="file://$PROJECT_DIR$/TurtleshellX_test.iml" filepath="$PROJECT_DIR$/TurtleshellX_test.iml" group="TurtleshellX" />
+      <module fileurl="file://$PROJECT_DIR$/RobotCode2018.iml" filepath="$PROJECT_DIR$/RobotCode2018.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RobotCode2018_main.iml" filepath="$PROJECT_DIR$/RobotCode2018_main.iml" group="RobotCode2018" />
+      <module fileurl="file://$PROJECT_DIR$/RobotCode2018_test.iml" filepath="$PROJECT_DIR$/RobotCode2018_test.iml" group="RobotCode2018" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
