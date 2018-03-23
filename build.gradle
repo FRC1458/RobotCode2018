@@ -31,6 +31,9 @@ deploy {
     }
 }
 
+apply plugin: "application"
+mainClassName = "org.usfirst.frc.team1458.robot.GeneratePaths"
+
 repositories {
     mavenCentral()
 }

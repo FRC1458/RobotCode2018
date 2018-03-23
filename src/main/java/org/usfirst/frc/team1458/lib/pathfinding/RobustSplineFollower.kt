@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1458.lib.pathfinding
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import jaci.pathfinder.Pathfinder
 import jaci.pathfinder.Trajectory
 import org.usfirst.frc.team1458.lib.core.BaseAutoMode
@@ -7,6 +8,7 @@ import org.usfirst.frc.team1458.lib.drive.TankDrive
 import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
+import java.io.File
 
 
 class RobustSplineFollower(val leftTrajectory: Trajectory,
@@ -23,8 +25,27 @@ class RobustSplineFollower(val leftTrajectory: Trajectory,
                            val everyIterationFunc: () -> Unit = { }
                     ) : BaseAutoMode() {
 
+    constructor(leftCSV: String,
+                rightCSV: String,
+                drivetrain: TankDrive,
+                gyro: AngleSensor? = null,
+                gyro_kP: Double = 0.0,
+                kP: Double,
+                kD: Double = 0.0,
+                kV: Double,
+                name: String = "Spline" +
+                        leftCSV.split("/").last().replace("leftTrajectory", ""),
+                stopFunc: () -> Boolean = { false },
+                reversed: Boolean = false,
+                everyIterationFunc: () -> Unit = { }) : this(Pathfinder.readFromCSV(File(leftCSV)),
+            Pathfinder.readFromCSV(File(rightCSV)), drivetrain, gyro, gyro_kP, kP, kD, kV,
+            name, stopFunc, reversed, everyIterationFunc)
+
     val dt: Double = leftTrajectory[0].dt * 1000.0
     override val name = name
+
+    var lastLeftError = 0.0
+    var lastRightError = 0.0
 
     override fun auto() {
         val startTime = systemTimeMillis
@@ -36,27 +57,46 @@ class RobustSplineFollower(val leftTrajectory: Trajectory,
         drivetrain.rightEnc.zero()
         drivetrain.leftEnc.zero()
 
+
         while((index) < (leftTrajectory.length()) && !stopFunc()) {
-            var left = leftTrajectory[index].velocity
-            var right = rightTrajectory[index].velocity
+            val leftError = leftTrajectory[index].position - drivetrain.leftEnc.distanceFeet
+            val rightError = rightTrajectory[index].position - drivetrain.rightEnc.distanceFeet
+
+            SmartDashboard.putNumber("LeftError", leftError)
+            SmartDashboard.putNumber("RightError", rightError)
+
+            SmartDashboard.putNumber("LeftD", ((leftError - lastLeftError) / dt))
+            SmartDashboard.putNumber("RightD", ((rightError - lastRightError) / dt))
+
+
+            var left = kP * leftError -
+                    kD * ((leftError - lastLeftError) / 10.0) +
+                    kV * leftTrajectory[index].velocity
+
+            var right = kP * rightError -
+                    kD * ((rightError - lastRightError) / 10.0) +
+                    kV * rightTrajectory[index].velocity
 
             if(gyro != null && gyro_kP != null) {
                 val angleError = Pathfinder.boundHalfDegrees(- Pathfinder.boundHalfDegrees(gyro.heading) - Pathfinder.boundHalfDegrees(Pathfinder.r2d(leftTrajectory[index].heading)))
 
                 val turnAdjustment = gyro_kP * angleError
 
-                left -= turnAdjustment
-                right += turnAdjustment
+                left += turnAdjustment
+                right -= turnAdjustment
             }
             if(reversed){
                 left *= -1.0
                 right *= -1.0
             }
 
-            drivetrain.setOpenLoopDrive(leftTrajectory, rightTrajectory)
+            drivetrain.setOpenLoopDrive(left, right)
             everyIterationFunc()
 
             delay(10)
+            lastLeftError = leftError
+            lastRightError = rightError
+
             index = getIndex()
         }
         drivetrain.setRawDrive(0.0,0.0)

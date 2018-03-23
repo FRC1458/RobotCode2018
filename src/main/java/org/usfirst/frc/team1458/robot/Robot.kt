@@ -15,7 +15,12 @@ import edu.wpi.cscore.MjpegServer
 import edu.wpi.cscore.UsbCamera
 import edu.wpi.cscore.VideoMode
 import edu.wpi.first.wpilibj.DriverStation
+import org.usfirst.frc.team1458.lib.pathfinding.RobustSplineFollower
+import org.usfirst.frc.team1458.lib.pathfinding.purepursuit.Kinematics
 import org.usfirst.frc.team1458.lib.sensor.PDP
+import org.usfirst.frc.team1458.lib.util.maths.kinematics.RigidTransform2D
+import org.usfirst.frc.team1458.lib.util.maths.kinematics.Rotation2D
+import org.usfirst.frc.team1458.lib.util.maths.kinematics.Translation2D
 
 
 class Robot : BaseRobot() {
@@ -85,17 +90,110 @@ class Robot : BaseRobot() {
 
 
     override fun setupAutoModes() {
+        val spline_kP = 0.15
+        val spline_kD = 0.01
+        val spline_kV = 1.0 / 6.9
+        val spline_gyro_kP = 0.0 // 1.0 / 40.0
+
         addAutoMode(AutoMode.create {
+            elev1.speed = 0.0
+            elev2.speed = 0.0
+            robot.intake.update(false, false)
+
+            // Drop the Intake
             robot.drivetrain.tankDrive(0.7, 0.7)
             delay(200)
             robot.drivetrain.tankDrive(-0.7, -0.7)
             delay(200)
             robot.drivetrain.tankDrive(0.0, 0.0)
             delay(50)
+
+
+            robot.drivetrain.tankDrive(-0.30, -0.30)
+            delay(700)
+            robot.drivetrain.tankDrive(0.0, 0.0)
+            delay(50)
+
+            var startTime = systemTimeMillis
+            while(systemTimeMillis - startTime < 1500) {
+                robot.intake.update(true, false)
+            }
+            robot.intake.update(false, false)
+
+            startTime = systemTimeMillis
+            elev1.speed = 0.4
+            elev2.speed = 0.4
+
+            while(GameData2018.getOwnSwitch() == GameData2018.Side.ERROR) {
+                delay(5)
+            }
+
+            if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
+                SplineFollower (
+                        leftCSV = "/home/admin/centerToLeft_left_detailed.csv",
+                        rightCSV = "/home/admin/centerToLeft_right_detailed.csv",
+                        drivetrain = robot.drivetrain, //gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                        //kP = spline_kP, kD = spline_kD, kV = spline_kV,
+                        name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                        everyIterationFunc = {
+                            if(systemTimeMillis - startTime < 2800) {
+                                elev1.speed = 0.4
+                                elev2.speed = 0.4
+                            } else {
+                                elev1.speed = 0.0
+                                elev2.speed = 0.0
+                            }
+                        }
+                ).auto()
+            } else {
+                SplineFollower (
+                        leftCSV = "/home/admin/centerToRight_left_detailed.csv",
+                        rightCSV = "/home/admin/centerToRight_right_detailed.csv",
+                        drivetrain = robot.drivetrain, //gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                        //kP = spline_kP, kD = spline_kD, kV = spline_kV,
+                        name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                        everyIterationFunc = {
+                            if(systemTimeMillis - startTime < 2800) {
+                                elev1.speed = 0.4
+                                elev2.speed = 0.4
+                            } else {
+                                elev1.speed = 0.0
+                                elev2.speed = 0.0
+                            }
+                        }
+                ).auto()
+            }
+
+            val startTime2 = systemTimeMillis
+            while(systemTimeMillis - startTime2 < 800) {
+                robot.intake.update(false, true)
+            }
+            robot.intake.update(false, false)
+
             SplineFollower (
+                    leftCSV = "/home/admin/auton2_left_detailed.csv",
+                    rightCSV = "/home/admin/auton2_right_detailed.csv",
+                    drivetrain = robot.drivetrain, //gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                    //kP = spline_kP, kD = spline_kD, kV = spline_kV,
+                    name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
+                    reversed = true
+            ).auto()
+        })
+
+        // not good
+        /*addAutoMode(AutoMode.create {
+            robot.drivetrain.tankDrive(0.7, 0.7)
+            delay(200)
+            robot.drivetrain.tankDrive(-0.7, -0.7)
+            delay(200)
+            robot.drivetrain.tankDrive(0.0, 0.0)
+            delay(50)
+
+            RobustSplineFollower (
                     leftCSV = "/home/admin/auton1_left_detailed.csv",
                     rightCSV = "/home/admin/auton1_right_detailed.csv",
-                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                    kP = spline_kP, kD = spline_kD, kV = spline_kV,
                     name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                     everyIterationFunc = { robot.intake.update(true, false) }
             ).auto()
@@ -108,10 +206,11 @@ class Robot : BaseRobot() {
             elev2.speed = 0.0
 
 
-            SplineFollower (
+            RobustSplineFollower (
                     leftCSV = "/home/admin/auton2_left_detailed.csv",
                     rightCSV = "/home/admin/auton2_right_detailed.csv",
-                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                    kP = spline_kP, kD = spline_kD, kV = spline_kV,
                     name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                     reversed = true
             ).auto()
@@ -122,10 +221,11 @@ class Robot : BaseRobot() {
             elev2.speed = 0.6
 
             if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
-                SplineFollower (
+                RobustSplineFollower (
                         leftCSV = "/home/admin/finalleft_left_detailed.csv",
                         rightCSV = "/home/admin/finalleft_right_detailed.csv",
-                        drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                        drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                        kP = spline_kP, kD = spline_kD, kV = spline_kV,
                         name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                         everyIterationFunc = {
                             if(systemTimeMillis - startTime < 1900) {
@@ -138,10 +238,11 @@ class Robot : BaseRobot() {
                         }
                 ).auto()
             } else {
-                SplineFollower (
+                RobustSplineFollower (
                         leftCSV = "/home/admin/finalright_left_detailed.csv",
                         rightCSV = "/home/admin/finalright_right_detailed.csv",
-                        drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                        drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                        kP = spline_kP, kD = spline_kD, kV = spline_kV,
                         name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                         everyIterationFunc = {
                             if(systemTimeMillis - startTime < 1900) {
@@ -161,14 +262,15 @@ class Robot : BaseRobot() {
             }
             robot.intake.update(false, false)
 
-            SplineFollower (
+            RobustSplineFollower (
                     leftCSV = "/home/admin/auton2_left_detailed.csv",
                     rightCSV = "/home/admin/auton2_right_detailed.csv",
-                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = 0.0,
+                    drivetrain = robot.drivetrain, gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
+                    kP = spline_kP, kD = spline_kD, kV = spline_kV,
                     name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },
                     reversed = true
             ).auto()
-        })
+        })*/
 
         // Drive Forward Only
         addAutoMode(AutoMode.create {
@@ -207,8 +309,13 @@ class Robot : BaseRobot() {
         robot.drivetrain.rightMaster.connectedEncoder.zero()
     }
 
+    //var transform : RigidTransform2D = RigidTransform2D(Translation2D.ZERO, Rotation2D.FORWARD)
+    //var lastLeft = 0.0
+    //var lastRight = 0.0
 
     override fun teleopPeriodic() {
+
+        SmartDashboard.putNumber("GYRO TEST GOOD ", robot.navX.yaw.heading)
 
         // Press button to invert drivetrain
         if(oi.invertButton.triggered && !lastTriggered) {
@@ -322,6 +429,9 @@ class Robot : BaseRobot() {
 
         TelemetryLogger.putValue("elevator2_current", elev2.currentDraw)
         TelemetryLogger.putValue("elevator2_voltage", elev2.outputVoltage)
+
+        //val left = robot.drivetrain.
+        //transform = Kinematics.integrateForwardKinematics(transform, , malador, robot.navX.yaw.orientation)
 
     }
 

@@ -199,13 +199,13 @@ class TankDrive(val leftMaster: SmartMotor,
         }
 
         // Accel limit
-        if(abs((leftTarget - leftMaster.PIDsetpoint) / (lastTime - systemTimeSeconds)) > accelLimit) {
+        if(Math.abs((leftTarget - leftMaster.PIDsetpoint) / (lastTime - systemTimeSeconds)) > accelLimit) {
             leftMaster.PIDsetpoint = leftMaster.PIDsetpoint + accelLimit * (lastTime - systemTimeSeconds)
         } else {
             leftMaster.PIDsetpoint = leftTarget
         }
 
-        if(abs((rightTarget - rightMaster.PIDsetpoint) / (lastTime - systemTimeSeconds)) > accelLimit) {
+        if(Math.abs((rightTarget - rightMaster.PIDsetpoint) / (lastTime - systemTimeSeconds)) > accelLimit) {
             rightMaster.PIDsetpoint = rightMaster.PIDsetpoint + accelLimit * (lastTime - systemTimeSeconds)
         } else {
             rightMaster.PIDsetpoint = rightTarget
@@ -222,13 +222,13 @@ class TankDrive(val leftMaster: SmartMotor,
         rightTarget = right
 
         // Accel limit
-        if(abs((leftTarget - leftMaster.speed) / (lastTime - systemTimeSeconds)) > accelLimit) {
+        if(Math.abs((leftTarget - leftMaster.speed) / (lastTime - systemTimeSeconds)) > accelLimit) {
             leftMaster.speed = leftMaster.speed + accelLimit * (lastTime - systemTimeSeconds)
         } else {
             leftMaster.speed = leftTarget
         }
 
-        if(abs((rightTarget - rightMaster.speed) / (lastTime - systemTimeSeconds)) > accelLimit) {
+        if(Math.abs((rightTarget - rightMaster.speed) / (lastTime - systemTimeSeconds)) > accelLimit) {
             rightMaster.speed = rightMaster.speed + accelLimit * (lastTime - systemTimeSeconds)
         } else {
             rightMaster.speed = rightTarget

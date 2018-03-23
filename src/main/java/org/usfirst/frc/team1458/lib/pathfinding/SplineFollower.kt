@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1458.lib.pathfinding
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import jaci.pathfinder.Pathfinder
 import jaci.pathfinder.Trajectory
 import org.usfirst.frc.team1458.lib.core.BaseAutoMode
@@ -64,37 +65,25 @@ class SplineFollower(val left: Trajectory,
             drivetrain.setDriveVelocity(leftVel, rightVel)
             everyIterationFunc()
 
+
             //println("${rightTrajectory[index].heading}, ${leftTrajectory[index].heading}")
 
             //println("${leftTrajectory[index].velocity},${leftVel},${rightTrajectory[index].velocity},${rightVel},${rightTrajectory[index].heading},${gyro?.angle ?: 0.0},${drivetrain.leftMaster.connectedEncoder.rate * 1.11 / 360.0},${drivetrain.rightMaster.connectedEncoder.rate * 1.11 / 360.0},${drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0)},${drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0)}")
 
-            /*AutoDataLogger.putValue("Left Position", leftTrajectory[index].position)
-            AutoDataLogger.putValue("Right Position", rightTrajectory[index].position)
+            SmartDashboard.putNumber("Left Velocity", left[index].velocity)
+            SmartDashboard.putNumber("Right Velocity", right[index].velocity)
 
-            AutoDataLogger.putValue("Left Velocity", leftTrajectory[index].velocity)
-            AutoDataLogger.putValue("Right Velocity", rightTrajectory[index].velocity)
+            SmartDashboard.putNumber("Real Left Velocity", drivetrain.leftMaster.connectedEncoder.rate * 1.11 / 360.0)
+            SmartDashboard.putNumber("Real Right Velocity", drivetrain.rightMaster.connectedEncoder.rate * 1.11 / 360.0)
 
-            AutoDataLogger.putValue("Left Accel", leftTrajectory[index].acceleration)
-            AutoDataLogger.putValue("Right Accel", rightTrajectory[index].acceleration)
+            SmartDashboard.putNumber("Right Error", drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
+            SmartDashboard.putNumber("Left Error", drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
 
-            AutoDataLogger.putValue("Left Jerk", leftTrajectory[index].jerk)
-            AutoDataLogger.putValue("Right Jerk", rightTrajectory[index].jerk)
-
-            AutoDataLogger.putValue("Heading", rightTrajectory[index].heading)
-
-            AutoDataLogger.putValue("Real Heading", gyro?.angle ?: 0.0)
-            AutoDataLogger.putValue("Real Left Velocity", drivetrain.leftMaster.connectedEncoder.rate * 1.11 / 360.0)
-            AutoDataLogger.putValue("Real Right Velocity", drivetrain.rightMaster.connectedEncoder.rate * 1.11 / 360.0)
-
-            AutoDataLogger.putValue("Right Error", drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0))
-            AutoDataLogger.putValue("Left Error", drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0))
-
-            AutoDataLogger.endTeleop()*/
 
             // TODO remove to unbork
 
 
-            System.out.print(" Left Desired Velocity="+ left[index].velocity)
+            /*System.out.print(" Left Desired Velocity="+ left[index].velocity)
             System.out.print(" Right Desired Velocity="+ right[index].velocity)
 
             System.out.print(" Left Real Velocity="+ drivetrain.leftEnc.velocity * 39.3700787402 / 12.0)
@@ -102,7 +91,7 @@ class SplineFollower(val left: Trajectory,
 
             System.out.print(" RightError="+ drivetrain.rightMaster._talonInstance!!.getClosedLoopError(0).toDouble())
             System.out.print(" LeftError="+ drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
-            System.out.println("")
+            System.out.println("")*/
 
             delay(10)
             index = getIndex()
