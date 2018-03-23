@@ -18,9 +18,13 @@ import edu.wpi.first.wpilibj.DriverStation
 import org.usfirst.frc.team1458.lib.pathfinding.RobustSplineFollower
 import org.usfirst.frc.team1458.lib.pathfinding.purepursuit.Kinematics
 import org.usfirst.frc.team1458.lib.sensor.PDP
+import org.usfirst.frc.team1458.lib.util.flow.go
+import org.usfirst.frc.team1458.lib.util.maths.format
 import org.usfirst.frc.team1458.lib.util.maths.kinematics.RigidTransform2D
 import org.usfirst.frc.team1458.lib.util.maths.kinematics.Rotation2D
 import org.usfirst.frc.team1458.lib.util.maths.kinematics.Translation2D
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class Robot : BaseRobot() {
@@ -44,6 +48,10 @@ class Robot : BaseRobot() {
     val cameraServer = MjpegServer("CameraStream", 5801)
 
     val selectAutoAsDriveFwd = Switch.fromDIO(0).inverted // Pull to GND to select drive forward auto
+
+    /*var transform : RigidTransform2D = RigidTransform2D(Translation2D.ZERO, Rotation2D.FORWARD)
+    var lastLeft = 0.0
+    var lastRight = 0.0*/
 
     override fun robotSetup() {
         TelemetryLogger.setup(
@@ -86,6 +94,18 @@ class Robot : BaseRobot() {
         rearCamera.brightness = 1
 
         cameraServer.source = frontCamera
+
+        /*go {
+            try {
+                val obj = URL("http://tegra-ubuntu:8080/enc?x=${transform.translation.x.format(2)}&y=${transform.translation.y.format(2)}&theta=${transform.rotation.degrees.toInt()}")
+                with(obj.openConnection() as HttpURLConnection){
+
+                }
+                delay(10)
+            } catch (e: Throwable) {
+                println(e.stackTrace)
+            }
+        }*/
     }
 
 
@@ -309,9 +329,6 @@ class Robot : BaseRobot() {
         robot.drivetrain.rightMaster.connectedEncoder.zero()
     }
 
-    //var transform : RigidTransform2D = RigidTransform2D(Translation2D.ZERO, Rotation2D.FORWARD)
-    //var lastLeft = 0.0
-    //var lastRight = 0.0
 
     override fun teleopPeriodic() {
 
@@ -430,8 +447,12 @@ class Robot : BaseRobot() {
         TelemetryLogger.putValue("elevator2_current", elev2.currentDraw)
         TelemetryLogger.putValue("elevator2_voltage", elev2.outputVoltage)
 
-        //val left = robot.drivetrain.
-        //transform = Kinematics.integrateForwardKinematics(transform, , malador, robot.navX.yaw.orientation)
+        /*val left = robot.drivetrain.leftEnc.distanceFeet
+        val right = robot.drivetrain.rightEnc.distanceFeet
+        transform = Kinematics.integrateForwardKinematics(transform, left - lastLeft, right - lastRight, robot.navX.yaw.orientation)
+        lastLeft = left
+        lastRight = right*/
+
 
     }
 
