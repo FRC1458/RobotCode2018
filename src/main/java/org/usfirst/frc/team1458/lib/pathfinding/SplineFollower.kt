@@ -62,7 +62,11 @@ class SplineFollower(val left: Trajectory,
                 rightVel = rightVel * -1.0
             }
 
-            drivetrain.setDriveVelocity(leftVel, rightVel)
+            if(true) {
+                drivetrain.setDriveVelocity(leftVel, rightVel)
+            } else {
+                drivetrain.setOpenLoopDrive(leftVel / (drivetrain.closedLoopScaling ?: 1000000.0), rightVel / (drivetrain.closedLoopScaling ?: 1000000.0))
+            }
             everyIterationFunc()
 
 

@@ -6,6 +6,8 @@ import org.usfirst.frc.team1458.lib.input.interfaces.Switch
 class ControlBoard(val usbPort: Int) {
     val joystick = Joystick(usbPort)
 
+    val climberStay = Switch.create { joystick.getRawButton(3) }
+
     val elevator1 = Switch.create { joystick.getRawButton(4) }
     val elevator3 = Switch.create { joystick.getRawButton(5) }
 

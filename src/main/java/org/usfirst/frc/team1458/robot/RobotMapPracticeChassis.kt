@@ -35,6 +35,7 @@ class RobotMapPracticeChassis(oi: OI) {
             liftSpeed = 0.8,
             liftAfterSpeed = 0.2,
             winchSpeed = 0.8,
+            climbAfterControl = oi.controlBoard.climberStay,
             winchAfterSpeed = 0.0,
             liftAfterTime = 2000.0
     )

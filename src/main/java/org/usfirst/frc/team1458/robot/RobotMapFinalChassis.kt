@@ -46,9 +46,11 @@ class RobotMapFinalChassis(val oi: OI) {
             topLimit = Switch.fromDIO(3),
             liftControl = oi.controlBoard.lift,
             climbControl = oi.controlBoard.winch,
+            climbAfterWinchSpeed = 0.3,
+            climbAfterControl = oi.controlBoard.climberStay,
             liftSpeed = 0.4,
             liftAfterSpeed = -0.25,
-            winchSpeed = 0.9,
+            winchSpeed = 1.0,
             winchAfterSpeed = 0.0,
             liftAfterTime = 2000.0
     )

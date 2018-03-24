@@ -141,12 +141,12 @@ class Robot : BaseRobot() {
             robot.intake.update(false, false)
 
             startTime = systemTimeMillis
-            elev1.speed = 0.4
-            elev2.speed = 0.4
 
             while(GameData2018.getOwnSwitch() == GameData2018.Side.ERROR) {
                 delay(5)
             }
+            elev1.speed = 0.4
+            elev2.speed = 0.4
 
             if(GameData2018.getOwnSwitch() == GameData2018.Side.LEFT) {
                 SplineFollower (
@@ -191,8 +191,8 @@ class Robot : BaseRobot() {
             robot.intake.update(false, false)
 
             SplineFollower (
-                    leftCSV = "/home/admin/auton2_left_detailed.csv",
-                    rightCSV = "/home/admin/auton2_right_detailed.csv",
+                    leftCSV = "/home/admin/driveBackward_left_detailed.csv",
+                    rightCSV = "/home/admin/driveBackward_right_detailed.csv",
                     drivetrain = robot.drivetrain, //gyro = robot.navX.yaw, gyro_kP = spline_gyro_kP,
                     //kP = spline_kP, kD = spline_kD, kV = spline_kV,
                     name = "OwnSwitch", stopFunc = { !(isAutonomous && isEnabled) },

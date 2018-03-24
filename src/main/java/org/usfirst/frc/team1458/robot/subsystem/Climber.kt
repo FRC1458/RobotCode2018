@@ -11,9 +11,11 @@ class Climber(val liftMotor: SmartMotor,
               val topLimit: Switch,
               val liftControl: Switch,
               val climbControl: Switch,
+              val climbAfterControl: Switch,
 
               val liftSpeed: Double = 0.5,
               val liftAfterSpeed: Double = -0.2,
+              val climbAfterWinchSpeed: Double = 0.3,
               val winchSpeed: Double = 0.5,
               val winchAfterSpeed: Double = 0.0,
               val liftAfterTime: Double = 3000.0,
@@ -27,6 +29,9 @@ class Climber(val liftMotor: SmartMotor,
 
     fun update(){
         SmartDashboard.putBoolean("LIMIT SWITCH TOP REE", topLimit.triggered)
+
+
+
         if(liftControl.triggered && topLimit.triggered &&
                 liftMotor.currentDraw <= liftCurrentLimit && !climbControl.triggered) {
             liftMotor.speed = liftSpeed
@@ -42,10 +47,14 @@ class Climber(val liftMotor: SmartMotor,
                 climbStart = systemTimeMillis
             }
             winchStarted = true
-        } else if (winchStarted && winchMotor.currentDraw <= winchCurrentLimit) {
+        } /*else if (winchStarted && winchMotor.currentDraw <= winchCurrentLimit) {
             winchMotor.speed = winchAfterSpeed
-        } else {
-            winchMotor.speed = 0.0
+        }*/ else {
+            if(climbAfterControl.triggered) {
+                winchMotor.speed = climbAfterWinchSpeed
+            } else {
+                winchMotor.speed = 0.0
+            }
             climbStart = 0.0
         }
     }
