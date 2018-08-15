@@ -33,15 +33,18 @@ class SplineFollower(val left: Trajectory,
             this(Pathfinder.readFromCSV(File(leftCSV)), Pathfinder.readFromCSV(File(rightCSV)),
                     drivetrain, dt, gyro, gyro_kP, name, stopFunc, reversed, everyIterationFunc)
 
-    val dt: Double = dt ?: (left[0].dt * 1000.0)
+    val dt: Double = dt ?: (left[0].dt * 1000.0) // Delta Time: Time between pathfinder points
     override val name = name
 
     override fun auto() {
         val startTime = systemTimeMillis
         fun getIndex() = Math.floor((systemTimeMillis - startTime) / dt).toInt()
 
+
         var index : Int = getIndex()
         gyro?.zero()
+
+        // While the path is still being followed AND stop function is false...
         while((index) < (left.length()) && !stopFunc()) {
             //AutoDataLogger.currentIterationTimestamp = systemTimeMillis
 
