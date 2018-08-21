@@ -8,7 +8,6 @@ import org.usfirst.frc.team1458.lib.drive.TankDrive
 import org.usfirst.frc.team1458.lib.sensor.interfaces.AngleSensor
 import org.usfirst.frc.team1458.lib.util.flow.delay
 import org.usfirst.frc.team1458.lib.util.flow.systemTimeMillis
-<<<<<<< HEAD
 import org.usfirst.frc.team1458.lib.util.maths.kinematics.Twist2D
 import java.io.File
 import java.lang.Math.toDegrees
@@ -16,31 +15,17 @@ import kotlin.math.abs
 
 
 class NLRTSplineFollower(val mainTrajectory: Trajectory,
-                         val drivetrain: TankDrive,
-                         val gyro: AngleSensor? = null,
-                         val gyro_kP: Double? = null,
-                         override val name: String,
-                         val stopFunc: () -> Boolean = { false },
-                         val reversed: Boolean = false,
-                         val everyIterationFunc: () -> Unit = { }
-=======
-import java.io.File
-
-
-class NLRTSplineFollower(val mainTrajectory: Trajectory,
                      val drivetrain: TankDrive,
                      val gyro: AngleSensor? = null,
                      val gyro_kP: Double? = null,
-                     name: String,
+                     override val name: String,
                      val stopFunc: () -> Boolean = { false },
                      val reversed: Boolean = false,
                      val everyIterationFunc: () -> Unit = { }
->>>>>>> CalGames2018
-                    ) : BaseAutoMode() {
+                        ) : BaseAutoMode() {
 
     constructor(mainTrajectoryCSV: String, drivetrain: TankDrive, gyro: AngleSensor? = null, gyro_kP: Double? = null,
-                name: String = "Spline" +
-                        mainTrajectoryCSV.split("/").last().replace("leftTrajectory", ""),
+                name: String = "Spline" + mainTrajectoryCSV.split("/").last().replace("leftTrajectory", ""),
                 stopFunc: () -> Boolean = { false },
                 reversed: Boolean = false,
                 everyIterationFunc: () -> Unit = { }) :
@@ -48,7 +33,6 @@ class NLRTSplineFollower(val mainTrajectory: Trajectory,
                     gyro_kP, name, stopFunc, reversed, everyIterationFunc)
 
     val pathfinderDeltaTime: Double = (mainTrajectory[0].dt * 1000.0) // Delta Time: Time between pathfinder points
-<<<<<<< HEAD
 
     override fun auto() {
 
@@ -88,7 +72,7 @@ class NLRTSplineFollower(val mainTrajectory: Trajectory,
 
                 val xError = mainTrajectory[trajectoryIndex].x - robotData.dx
                 val yError = mainTrajectory[trajectoryIndex].y - robotData.dx
-=======
+
     override val name = name
 
     override fun auto() {
@@ -105,30 +89,27 @@ class NLRTSplineFollower(val mainTrajectory: Trajectory,
             var desiredVelocity = mainTrajectory[trajectoryIndex].velocity
 
             if(gyro != null && gyro_kP != null) {
-                var thetaError = Pathfinder.boundHalfDegrees(- Pathfinder.boundHalfDegrees(gyro.heading) - Pathfinder.boundHalfDegrees(Pathfinder.r2d(mainTrajectory[index].heading)))
+                var thetaError = Pathfinder.boundHalfDegrees(- Pathfinder.boundHalfDegrees(gyro.heading) - Pathfinder.boundHalfDegrees(Pathfinder.r2d(mainTrajectory[trajectoryIndex].heading)))
                 //println(angleError)
 
                 val xError = mainTrajectory[trajectoryIndex].x - robotX
                 val yError = mainTrajectory[trajectoryIndex].y - robotY
->>>>>>> CalGames2018
 
                 if (kotlin.math.abs(thetaError) < 0.0001) {
                     thetaError = 0.0001
                 }
 
-<<<<<<< HEAD
                 /* Replace ros_pathfinder with these vars, FOR REFERENCE
                 val vFF = mainTrajectory[trajectoryIndex].velocity
                 val wFF = rotationalVelocity // TODO check if needs abs value velocity or relative!
                 val theta = mainTrajectory[trajectoryIndex].heading
                 */
-=======
+
                 val vFF = mainTrajectory[trajectoryIndex].velocity
                 val wFF = mainTrajectory[trajectoryIndex].angular_velocity
                 val theta = mainTrajectory[trajectoryIndex].heading
 
-                val turnAdjustment = gyro_kP * angleError
->>>>>>> CalGames2018
+                val turnAdjustment = gyro_kP * thetaError
 
                 mainVel -= turnAdjustment
                 rightVel += turnAdjustment
@@ -173,13 +154,11 @@ class NLRTSplineFollower(val mainTrajectory: Trajectory,
             System.out.print(" LeftError="+ drivetrain.leftMaster._talonInstance!!.getClosedLoopError(0).toDouble())
             System.out.println("")*/
 
-<<<<<<< HEAD
             oldRobotData = robotData
             delay(10)
             robotData = getRobotData() // TODO See if this ALSO actually works
-=======
+
             delay(10)
->>>>>>> CalGames2018
             trajectoryIndex = getIndex()
         }
         drivetrain.setRawDrive(0.0,0.0)
